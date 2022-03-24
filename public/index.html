@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2048</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        height: 100%;
+        width: 100%;
+
+        overflow: hidden;
+      }
+
+      .wrapper {
+        height: 100%;
+        width: 100%;
+
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      canvas {
+        width: min(100vw, 400px);
+        height: min(100vw, 400px);
+      }
+
+      .info-board {
+        width: 100%;
+        max-width: 400px;
+
+        padding: 4px;
+
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .keyboard-toggle {
+        padding: 4px;
+        background-color: darkorange;
+        border-radius: 4px;
+        outline: none;
+      }
+
+      .keyboard-toggle.toggled {
+        background-color: forestgreen;
+      }
+
+      .keyboard {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .keyboard.hidden {
+        display: none;
+      }
+
+      .keyboard > div {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .action {
+        background-color: rgb(246, 125, 95);
+      }
+
+      .key {
+        margin: 2px;
+        height: 60px;
+        width: 60px;
+
+        border-radius: 3px;
+        border: 2px solid rgb(245, 150, 98);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <canvas id="canv" height="400" width="400"></canvas>
+
+      <div class="info-board">
+        <div class="score-wrapper">Score: <span class="score">0</span></div>
+
+        <button class="keyboard-toggle">Keyboard</button>
+      </div>
+
+      <div class="keyboard hidden">
+        <div>
+          <div class="key"></div>
+          <div class="key action up"></div>
+          <div class="key"></div>
+        </div>
+        <div>
+          <div class="key action left"></div>
+          <div class="key"></div>
+          <div class="key action right"></div>
+        </div>
+        <div>
+          <div class="key"></div>
+          <div class="key action down"></div>
+          <div class="key"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="events.js"></script>
+  </body>
+</html>
