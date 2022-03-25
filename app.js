@@ -4,7 +4,7 @@ import { Telegraf, Markup } from "telegraf";
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const gameShortName = "asa2048";
-const gameUrl = "http://3fee-178-150-172-172.ngrok.io/";
+const gameUrl = "https://3fee-178-150-172-172.ngrok.io/";
 
 const markup = Markup.inlineKeyboard([Markup.button.game("🎮 Play now!")]);
 

@@ -42,13 +42,21 @@
 
         display: flex;
         justify-content: space-between;
+        align-items: center;
       }
 
+      .restart,
       .keyboard-toggle {
         padding: 4px;
         background-color: darkorange;
         border-radius: 4px;
         outline: none;
+        cursor: pointer;
+      }
+
+      .restart:disabled {
+        background-color: darkgrey;
+        cursor: default;
       }
 
       .keyboard-toggle.toggled {
@@ -90,6 +98,8 @@
       <div class="info-board">
         <div class="score-wrapper">Score: <span class="score">0</span></div>
 
+        <button class="restart" disabled>Restart</button>
+
         <button class="keyboard-toggle">Keyboard</button>
       </div>
 
@@ -112,7 +122,8 @@
       </div>
     </div>
 
-    <script src="main.js"></script>
-    <script src="events.js"></script>
+    <script src="js/helpers.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/events.js"></script>
   </body>
 </html>
