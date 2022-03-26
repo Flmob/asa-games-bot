@@ -26,7 +26,6 @@ const onScoreChange = (score) => {
 const onGameEnd = (score) => {
   const message = `You've lost! Your score is ${score}`;
   isGameOver = true;
-  restartBtn.disabled = false;
   // alert(message);
   console.log(message);
   // game2048.start();
@@ -47,7 +46,6 @@ restartBtn.addEventListener("click", () => {
   if (isGameOver) isGameOver = false;
 
   game2048.start();
-  restartBtn.disabled = true;
 });
 
 keyboardToggleBtn.addEventListener("click", () => {
