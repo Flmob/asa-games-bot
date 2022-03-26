@@ -49,7 +49,7 @@ const app = express()
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
-app.use(express.static('games/2048'));
+app.use(express.static(path.join(__dirname, 'games/2048')));
 
 app.get('/2048', function(req, res) {
     res.sendFile('games/2048/index.html', {root: __dirname })
