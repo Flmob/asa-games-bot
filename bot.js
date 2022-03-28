@@ -37,7 +37,7 @@ bot.on("inline_query", (ctx) => {
     {
       type: "game",
       id: 2,
-      game_short_name: games.tRex.shortName,
+      game_short_name: games.t_rex.shortName,
       reply_markup: markup,
     },
   ]);
