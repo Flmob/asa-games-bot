@@ -3,8 +3,16 @@ import { Telegraf, Markup } from "telegraf";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-const gameShortName = "asa2048";
-const gameUrl = "https://shielded-woodland-35441.herokuapp.com/2048/";
+const games = {
+  asa2048: {
+    shortName: "asa2048",
+    url: "https://shielded-woodland-35441.herokuapp.com/2048/",
+  },
+  tRex: {
+    shortName: "t_rex",
+    url: "https://shielded-woodland-35441.herokuapp.com/t-rex/",
+  },
+};
 
 const markup = Markup.inlineKeyboard([Markup.button.game("🎮 Play now!")]);
 
@@ -12,7 +20,7 @@ bot.command("start", (ctx) => {
   console.log(ctx.from);
   bot.telegram.sendMessage(
     ctx.chat.id,
-    "hello there! Welcome to my new telegram bot.",
+    "Hello there! Welcome to Asa Games Bot.",
     {}
   );
 });
@@ -23,19 +31,36 @@ bot.on("inline_query", (ctx) => {
     {
       type: "game",
       id: 1,
-      game_short_name: gameShortName,
+      game_short_name: games.asa2048.shortName,
+      reply_markup: markup,
+    },
+    {
+      type: "game",
+      id: 2,
+      game_short_name: games.tRex.shortName,
       reply_markup: markup,
     },
   ]);
 });
 
-bot.command("game", (ctx) => {
-    console.log('GAME');
-    console.log(ctx.from);
+bot.command("2048", (ctx) => {
+  console.log("GAME 2048");
+  console.log(ctx.from);
 
-    return ctx.replyWithGame(gameShortName, markup)
+  return ctx.replyWithGame(games.asa2048.shortName, markup);
 });
 
-bot.gameQuery((ctx) => ctx.answerGameQuery(gameUrl));
+bot.command("t-rex", (ctx) => {
+  console.log("GAME t-rex");
+  console.log(ctx.from);
+
+  return ctx.replyWithGame(games.tRex.shortName, markup);
+});
+
+bot.gameQuery((ctx) => {
+  console.log(ctx);
+
+  return ctx.answerGameQuery(games.asa2048.url);
+});
 
 bot.launch();
