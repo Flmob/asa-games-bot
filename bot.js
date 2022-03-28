@@ -8,7 +8,7 @@ const games = {
     shortName: "asa2048",
     url: "https://shielded-woodland-35441.herokuapp.com/2048/",
   },
-  tRex: {
+  t_rex: {
     shortName: "t_rex",
     url: "https://shielded-woodland-35441.herokuapp.com/t-rex/",
   },
@@ -58,9 +58,13 @@ bot.command("t-rex", (ctx) => {
 });
 
 bot.gameQuery((ctx) => {
-  console.log(ctx);
+  console.log("callbackQuery", ctx.callbackQuery);
 
-  return ctx.answerGameQuery(games.asa2048.url);
+  const {
+    callbackQuery: { game_short_name },
+  } = ctx;
+
+  return ctx.answerGameQuery(games[game_short_name].url || "/");
 });
 
 bot.launch();
