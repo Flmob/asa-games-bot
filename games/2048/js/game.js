@@ -66,7 +66,7 @@ class Game2048 {
   tileSize;
   outlineStep;
   score = 0;
-  moveName = ""; //up, down, left, right
+  direction = ""; //up, down, left, right
   isNewTileNeeded = false;
   isGameOver = false;
 
@@ -96,6 +96,10 @@ class Game2048 {
       this.canvas.clientHeight / fieldSize,
       this.canvas.clientWidth / fieldSize
     );
+  }
+
+  setDirection(action) {
+    this.direction ? this.direction : this.direction = action;
   }
 
   getEmptyTiles() {
@@ -378,7 +382,7 @@ class Game2048 {
       }
     };
 
-    switch (this.moveName) {
+    switch (this.direction) {
       case UP:
         moveUp();
         break;
@@ -395,9 +399,9 @@ class Game2048 {
   };
 
   calc() {
-    if (this.moveName) {
+    if (this.direction) {
       this.moveTiles();
-      this.moveName = "";
+      this.direction = "";
 
       if (this.isNewTileNeeded) {
         this.addRandomTile();

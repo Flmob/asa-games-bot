@@ -39,7 +39,7 @@ const game2048 = new Game2048(canvas, {
 game2048.start();
 
 document.addEventListener("keyup", (e) => {
-  game2048.moveName = (!game2048.moveName && actions[e.key]) || "";
+  game2048.setDirection(actions[e.key] || "");
 });
 
 restartBtn.addEventListener("click", () => {
@@ -55,31 +55,28 @@ keyboardToggleBtn.addEventListener("click", () => {
   keyboard.classList.toggle("hidden", !isKeyboardVisible);
 });
 
-upBtn.addEventListener("touchend", () => (game2048.moveName = actions.UP));
-upBtn.addEventListener("click", () => (game2048.moveName = actions.UP));
+upBtn.addEventListener("touchend", () => game2048.setDirection(actions.UP));
+upBtn.addEventListener("click", () => game2048.setDirection(actions.UP));
 
-downBtn.addEventListener("touchend", () => (game2048.moveName = actions.DOWN));
-downBtn.addEventListener("click", () => (game2048.moveName = actions.DOWN));
+downBtn.addEventListener("touchend", () => game2048.setDirection(actions.DOWN));
+downBtn.addEventListener("click", () => game2048.setDirection(actions.DOWN));
 
-leftBtn.addEventListener("touchend", () => (game2048.moveName = actions.LEFT));
-leftBtn.addEventListener("click", () => (game2048.moveName = actions.LEFT));
+leftBtn.addEventListener("touchend", () => game2048.setDirection(actions.LEFT));
+leftBtn.addEventListener("click", () => game2048.setDirection(actions.LEFT));
 
-rightBtn.addEventListener(
-  "touchend",
-  () => (game2048.moveName = actions.RIGHT)
-);
-rightBtn.addEventListener("click", () => (game2048.moveName = actions.RIGHT));
+rightBtn.addEventListener("touchend", () => game2048.setDirection(actions.RIGHT));
+rightBtn.addEventListener("click", () => game2048.setDirection(actions.RIGHT));
 
 const handleGesture = () => {
   const xDiff = Math.abs(touchstartX - touchendX);
   const yDiff = Math.abs(touchstartY - touchendY);
 
   if (xDiff > yDiff) {
-    if (touchendX < touchstartX) game2048.moveName = actions.LEFT;
-    if (touchendX > touchstartX) game2048.moveName = actions.RIGHT;
+    if (touchendX < touchstartX) game2048.setDirection(actions.LEFT);
+    if (touchendX > touchstartX) game2048.setDirection(actions.RIGHT);
   } else {
-    if (touchendY < touchstartY) game2048.moveName = actions.UP;
-    if (touchendY > touchstartY) game2048.moveName = actions.DOWN;
+    if (touchendY < touchstartY) game2048.setDirection(actions.UP);
+    if (touchendY > touchstartY) game2048.setDirection(actions.DOWN);
   }
 };
 
