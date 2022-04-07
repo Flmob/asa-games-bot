@@ -1,5 +1,4 @@
-const canvas = document.querySelector("#canv");
-const ctx = canvas.getContext("2d");
+const canvas = document.querySelector("#canvas");
 
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
