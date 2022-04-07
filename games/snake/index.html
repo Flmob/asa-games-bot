@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        height: 100%;
+        width: 100%;
+
+        overflow: hidden;
+
+        background-color: black;
+      }
+
+      .wrapper {
+        height: 100%;
+        width: 100%;
+
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      canvas {
+        width: min(100vw, 800px);
+        height: min(50vw, 400px);
+
+        border: 1px solid rgb(0, 255, 17);
+      }
+
+      .info-board {
+        width: 100%;
+        max-width: 400px;
+
+        padding: 4px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .score-wrapper {
+          color: green;
+      }
+
+      .restart,
+      .keyboard-toggle {
+        padding: 4px;
+        background-color: green;
+        border-radius: 4px;
+        outline: none;
+        cursor: pointer;
+        color: black;
+      }
+
+      .keyboard-toggle.toggled {
+        background-color: darkgreen;
+      }
+
+      .keyboard {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .keyboard.hidden {
+        display: none;
+      }
+
+      .keyboard > div {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .action {
+        background-color: green;
+      }
+
+      .key {
+        margin: 2px;
+        height: 60px;
+        width: 60px;
+
+        border-radius: 3px;
+        border: 2px solid darkgreen;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <canvas id="canvas" height="400" width="800"></canvas>
+
+      <div class="info-board">
+        <div class="score-wrapper">Score: <span class="score">0</span></div>
+
+        <button class="restart">Restart</button>
+
+        <button class="keyboard-toggle">Keyboard</button>
+      </div>
+
+      <div class="keyboard hidden">
+        <div>
+          <div class="key"></div>
+          <div class="key action up"></div>
+          <div class="key"></div>
+        </div>
+        <div>
+          <div class="key action left"></div>
+          <div class="key action center"></div>
+          <div class="key action right"></div>
+        </div>
+        <div>
+          <div class="key"></div>
+          <div class="key action down"></div>
+          <div class="key"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/helpers.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/events.js"></script>
+  </body>
+</html>
