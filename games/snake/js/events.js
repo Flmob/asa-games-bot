@@ -16,7 +16,6 @@ let touchendX = 0;
 let touchstartY = 0;
 let touchendY = 0;
 
-let isGameOver = false;
 let isKeyboardVisible = false;
 
 const onScoreChange = (score) => {
@@ -25,8 +24,6 @@ const onScoreChange = (score) => {
 
 const onGameEnd = (score) => {
   const message = `You've lost! Your score is ${score}`;
-  // isGameOver = true;
-  // alert(message);
   console.log(message);
 };
 
@@ -35,15 +32,10 @@ const snake = new Snake(canvas, { onScoreChange, onGameEnd });
 snake.start();
 
 document.addEventListener("keyup", (e) => {
-  // console.log(e.key);
   snake.setDirection(actions[e.key] || "");
 });
 
-restartBtn.addEventListener("click", () => {
-  if (isGameOver) isGameOver = false;
-
-  snake.start();
-});
+restartBtn.addEventListener("click", () => snake.start());
 
 keyboardToggleBtn.addEventListener("click", () => {
   isKeyboardVisible = !isKeyboardVisible;

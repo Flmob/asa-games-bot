@@ -59,8 +59,8 @@ class Snake {
     this.onGameEnd = onGameEnd;
   }
 
-  setDirection(action) {
-    this.direction ? this.direction : (this.direction = action);
+  setDirection(action = "") {
+    this.direction = action;
   }
 
   isCollisionWithSnake(obj) {
@@ -171,18 +171,24 @@ class Snake {
   }
 
   calc() {
-    if (this.direction) {
-      if (this.direction === ACTION) {
-        this.togglePause();
-        this.direction = "";
-        return;
-      }
-
-      this.snakeDirection = this.direction;
+    if (this.direction === ACTION) {
+      this.togglePause();
       this.direction = "";
     }
 
     if (this.isPaused) return;
+
+    if (
+      (this.snakeDirection === UP && this.direction === DOWN) ||
+      (this.snakeDirection === DOWN && this.direction === UP) ||
+      (this.snakeDirection === LEFT && this.direction === RIGHT) ||
+      (this.snakeDirection === RIGHT && this.direction === LEFT)
+    ) {
+      this.direction = "";
+    }
+
+    this.snakeDirection = this.direction || this.snakeDirection;
+    this.direction = "";
 
     this.updateSnakeAndFood();
   }
@@ -191,12 +197,6 @@ class Snake {
     this.drawField();
     this.drawSnake();
     this.drawFood();
-
-    this.onScoreChange(this.score);
-    if (this.isGameOver) {
-      this.onGameEnd(this.score);
-      this.isGameOver = false;
-    }
   }
 
   step() {
@@ -205,8 +205,6 @@ class Snake {
   }
 
   animate = () => {
-    requestAnimationFrame(this.animate);
-
     this.now = Date.now();
     const elapsed = this.now - this.then;
 
@@ -215,6 +213,14 @@ class Snake {
 
       this.step();
     }
+
+    this.onScoreChange(this.score);
+    if (this.isGameOver) {
+      this.onGameEnd(this.score);
+      return;
+    }
+
+    requestAnimationFrame(this.animate);
   };
 
   start() {
