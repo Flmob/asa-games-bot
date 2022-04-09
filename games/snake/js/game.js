@@ -17,6 +17,34 @@ const actions = {
   " ": ACTION,
 };
 
+const maxOutline = 4;
+const defaultOutline = {
+  width: maxOutline,
+  isUp: true,
+};
+
+const updateTileOutline = (tile, outlineStep = 0.4) => {
+  if (tile.outline.isUp) {
+    tile.outline.width += outlineStep;
+
+    if (tile.outline.width >= maxOutline) {
+      tile.outline.width = maxOutline;
+      tile.outline.isUp = false;
+    }
+  } else {
+    tile.outline.width -= outlineStep;
+
+    if (tile.outline.width <= 0) {
+      tile.outline.width = 0;
+      tile.outline.isUp = true;
+
+      tile.outline.isPlaying = false;
+    }
+  }
+
+  return tile;
+};
+
 class Snake {
   score = 0;
   snake = [];
@@ -91,6 +119,7 @@ class Snake {
       this.food = {
         x: getRandomInt(0, this.fieldWidth - 1),
         y: getRandomInt(0, this.fieldHeight - 1),
+        outline: { ...defaultOutline },
       };
     } while (this.isCollisionWithSnake(this.food));
   }
@@ -98,9 +127,20 @@ class Snake {
   drawFood() {
     this.ctx.fillStyle = "red";
 
-    const { x, y } = this.food;
+    const {
+      x,
+      y,
+      outline: { width: outlineWidth },
+    } = this.food;
 
-    this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
+    const size = this.scale - maxOutline * 2 + outlineWidth * 2;
+
+    this.ctx.fillRect(
+      x * this.scale + maxOutline - outlineWidth - 0.5,
+      y * this.scale + maxOutline - outlineWidth - 0.5,
+      size,
+      size
+    );
   }
 
   initSnake() {
@@ -189,6 +229,8 @@ class Snake {
 
     this.snakeDirection = this.direction || this.snakeDirection;
     this.direction = "";
+
+    this.food = updateTileOutline(this.food);
 
     this.updateSnakeAndFood();
   }
