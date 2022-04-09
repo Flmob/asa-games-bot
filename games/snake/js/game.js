@@ -61,6 +61,7 @@ class Snake {
   isPaused = true;
 
   //for FPS control
+  animationFrameRequest;
   fps = 9;
   fpsInterval = 1000 / this.fps;
   then;
@@ -262,7 +263,7 @@ class Snake {
       return;
     }
 
-    requestAnimationFrame(this.animate);
+    this.animationFrameRequest = requestAnimationFrame(this.animate);
   };
 
   start() {
@@ -275,6 +276,7 @@ class Snake {
     this.initSnake();
     this.dropFood();
 
+    cancelAnimationFrame(this.animationFrameRequest);
     this.then = Date.now();
     this.animate();
   }
