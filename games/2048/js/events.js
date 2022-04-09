@@ -15,7 +15,6 @@ let touchendX = 0;
 let touchstartY = 0;
 let touchendY = 0;
 
-let isGameOver = false;
 let isKeyboardVisible = false;
 
 const onScoreChange = (score) => {
@@ -24,10 +23,7 @@ const onScoreChange = (score) => {
 
 const onGameEnd = (score) => {
   const message = `You've lost! Your score is ${score}`;
-  isGameOver = true;
-  // alert(message);
   console.log(message);
-  // game2048.start();
 };
 
 const game2048 = new Game2048(canvas, {
@@ -41,11 +37,7 @@ document.addEventListener("keyup", (e) => {
   game2048.setDirection(actions[e.key] || "");
 });
 
-restartBtn.addEventListener("click", () => {
-  if (isGameOver) isGameOver = false;
-
-  game2048.start();
-});
+restartBtn.addEventListener("click", () => game2048.start());
 
 keyboardToggleBtn.addEventListener("click", () => {
   isKeyboardVisible = !isKeyboardVisible;
@@ -63,7 +55,9 @@ downBtn.addEventListener("click", () => game2048.setDirection(actions.DOWN));
 leftBtn.addEventListener("touchend", () => game2048.setDirection(actions.LEFT));
 leftBtn.addEventListener("click", () => game2048.setDirection(actions.LEFT));
 
-rightBtn.addEventListener("touchend", () => game2048.setDirection(actions.RIGHT));
+rightBtn.addEventListener("touchend", () =>
+  game2048.setDirection(actions.RIGHT)
+);
 rightBtn.addEventListener("click", () => game2048.setDirection(actions.RIGHT));
 
 const handleGesture = () => {
