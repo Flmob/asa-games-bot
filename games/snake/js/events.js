@@ -56,16 +56,20 @@ leftBtn.addEventListener("click", () => snake.setDirection(actions.LEFT));
 rightBtn.addEventListener("touchend", () => snake.setDirection(actions.RIGHT));
 rightBtn.addEventListener("click", () => snake.setDirection(actions.RIGHT));
 
-centerBtn.addEventListener("touchend", () => snake.setDirection(actions.ACTION));
+centerBtn.addEventListener("touchend", () =>
+  snake.setDirection(actions.ACTION)
+);
 centerBtn.addEventListener("click", () => snake.setDirection(actions.ACTION));
 
 const handleGesture = () => {
+  if (isKeyboardVisible) return;
+
   const xDiff = Math.abs(touchstartX - touchendX);
   const yDiff = Math.abs(touchstartY - touchendY);
 
-  if(xDiff === 0 && yDiff === 0) {
-      snake.setDirection(actions.ACTION);
-  }else if (xDiff > yDiff) {
+  if (xDiff === 0 && yDiff === 0) {
+    snake.setDirection(actions.ACTION);
+  } else if (xDiff > yDiff) {
     if (touchendX < touchstartX) snake.setDirection(actions.LEFT);
     if (touchendX > touchstartX) snake.setDirection(actions.RIGHT);
   } else {
