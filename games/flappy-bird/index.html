@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        height: 100vh;
+        width: 100vw;
+
+        overflow: hidden;
+      }
+
+      .canvas_wrapper {
+        height: 100%;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+</head>
+<body>
+    <div class="canvas_wrapper">
+      <canvas width="400" height="700"></canvas>
+    </div>
+
+    <script src="js/helpers.js"></script>
+    <script src="js/spritesMap.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/sprite.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

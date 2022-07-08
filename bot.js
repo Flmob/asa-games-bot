@@ -16,6 +16,10 @@ const games = {
     game_short_name: "snake",
     url: "https://shielded-woodland-35441.herokuapp.com/snake/",
   },
+  flappy_bird: {
+    game_short_name: "flappy_bird",
+    url: "https://shielded-woodland-35441.herokuapp.com/flappy_bird/",
+  },
 };
 
 const type = "game";
@@ -62,6 +66,13 @@ bot.command("snake", (ctx) => {
   console.log(ctx.from);
 
   return ctx.replyWithGame(games.snake.game_short_name, reply_markup);
+});
+
+bot.command("flappy_bird", (ctx) => {
+  console.log("GAME flappy_bird");
+  console.log(ctx.from);
+
+  return ctx.replyWithGame(games.flappy_bird.game_short_name, reply_markup);
 });
 
 bot.gameQuery((ctx) => {
