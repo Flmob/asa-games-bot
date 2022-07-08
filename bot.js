@@ -18,7 +18,7 @@ const games = {
   },
   flappy_bird: {
     game_short_name: "flappy_bird",
-    url: "https://shielded-woodland-35441.herokuapp.com/flappy_bird/",
+    url: "https://shielded-woodland-35441.herokuapp.com/flappy-bird/",
   },
 };
 
