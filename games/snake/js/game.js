@@ -1,50 +1,3 @@
-const UP = "up";
-const DOWN = "down";
-const LEFT = "left";
-const RIGHT = "right";
-const ACTION = "action";
-
-const actions = {
-  ACTION,
-  UP,
-  RIGHT,
-  DOWN,
-  LEFT,
-  ArrowUp: UP,
-  ArrowRight: RIGHT,
-  ArrowDown: DOWN,
-  ArrowLeft: LEFT,
-  " ": ACTION,
-};
-
-const maxOutline = 4;
-const defaultOutline = {
-  width: maxOutline,
-  isUp: true,
-};
-
-const updateTileOutline = (tile, outlineStep = 0.4) => {
-  if (tile.outline.isUp) {
-    tile.outline.width += outlineStep;
-
-    if (tile.outline.width >= maxOutline) {
-      tile.outline.width = maxOutline;
-      tile.outline.isUp = false;
-    }
-  } else {
-    tile.outline.width -= outlineStep;
-
-    if (tile.outline.width <= 0) {
-      tile.outline.width = 0;
-      tile.outline.isUp = true;
-
-      tile.outline.isPlaying = false;
-    }
-  }
-
-  return tile;
-};
-
 class Snake {
   score = 0;
   snake = [];
@@ -52,6 +5,7 @@ class Snake {
   direction = "";
   snakeDirection = RIGHT;
   defaultSnakeSize = 3;
+  snakeRemovedTail = null;
 
   fieldHeight = 18;
   fieldWidth = 36;
@@ -115,6 +69,19 @@ class Snake {
     this.ctx.stroke();
   }
 
+  clearCell(x, y) {
+    this.ctx.fillStyle = "black";
+    this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
+
+    this.ctx.strokeStyle = "rgb(0, 255, 17)";
+    this.ctx.strokeRect(
+      x * this.scale - 0.5,
+      y * this.scale - 0.5,
+      this.scale,
+      this.scale
+    );
+  }
+
   dropFood() {
     do {
       this.food = {
@@ -126,13 +93,15 @@ class Snake {
   }
 
   drawFood() {
-    this.ctx.fillStyle = "red";
-
     const {
       x,
       y,
       outline: { width: outlineWidth },
     } = this.food;
+
+    this.clearCell(x, y);
+
+    this.ctx.fillStyle = "red";
 
     const size = this.scale - maxOutline * 2 + outlineWidth * 2;
 
@@ -159,6 +128,7 @@ class Snake {
   updateSnakeAndFood() {
     if (!this.snakeDirection || this.isPaused) return;
 
+    this.snakeRemovedTail = null;
     const oldHead = this.snake[0];
     let newHead;
 
@@ -200,7 +170,7 @@ class Snake {
       this.dropFood();
       this.score++;
     } else {
-      this.snake.pop();
+      this.snakeRemovedTail = this.snake.pop();
     }
   }
 
@@ -209,6 +179,11 @@ class Snake {
       this.ctx.fillStyle = index ? "darkgreen" : "green";
       this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
     });
+
+    if (this.snakeRemovedTail) {
+      const { x, y } = this.snakeRemovedTail;
+      this.clearCell(x, y);
+    }
   }
 
   calc() {
@@ -237,7 +212,6 @@ class Snake {
   }
 
   draw() {
-    this.drawField();
     this.drawSnake();
     this.drawFood();
   }
@@ -275,6 +249,7 @@ class Snake {
 
     this.initSnake();
     this.dropFood();
+    this.drawField();
 
     cancelAnimationFrame(this.animationFrameRequest);
     this.then = Date.now();
