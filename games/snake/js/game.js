@@ -5,7 +5,6 @@ class Snake {
   direction = "";
   snakeDirection = RIGHT;
   lastSnakeDirection = this.snakeDirection;
-  defaultSnakeSize = 3;
   snakeRemovedTail = null;
 
   fieldHeight = 18;
@@ -17,8 +16,6 @@ class Snake {
 
   //for FPS control
   animationFrameRequest;
-  fps = 9;
-  fpsInterval = 1000 / this.fps;
   then;
   now;
 
@@ -116,7 +113,7 @@ class Snake {
 
   initSnake() {
     const y = getRandomInt(0, this.fieldHeight - 1);
-    this.snake = new Array(this.defaultSnakeSize)
+    this.snake = new Array(defaultSnakeSize)
       .fill({ x: 0, y })
       .map((part, index) => ({ ...part, x: index }))
       .reverse();
@@ -253,8 +250,8 @@ class Snake {
 
     this.updateInput();
 
-    if (elapsed > this.fpsInterval) {
-      this.then = this.now - (elapsed % this.fpsInterval);
+    if (elapsed > fpsInterval) {
+      this.then = this.now - (elapsed % fpsInterval);
       if (!this.isPaused) this.step();
     }
 

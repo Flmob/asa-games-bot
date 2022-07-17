@@ -17,8 +17,14 @@ const actions = {
   " ": ACTION,
 };
 
+// for food animation
 const maxOutline = 4;
 const defaultOutline = {
   width: maxOutline,
   isUp: true,
 };
+
+const defaultSnakeSize = 3;
+
+const fps = 9;
+const fpsInterval = 1000 / fps;
