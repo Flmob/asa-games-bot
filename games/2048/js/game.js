@@ -6,6 +6,7 @@ class Game2048 {
   outlineStep;
   score = 0;
   direction = ""; //up, down, left, right
+  isFieldUpdated = false;
   isNewTileNeeded = false;
   isGameOver = false;
 
@@ -159,6 +160,7 @@ class Game2048 {
 
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               } else if (
                 this.field[y - 1][x].value === this.field[y][x].value
               ) {
@@ -176,6 +178,7 @@ class Game2048 {
                 this.score += value;
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               }
             }
           }
@@ -205,6 +208,7 @@ class Game2048 {
 
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               } else if (
                 this.field[y + 1][x].value === this.field[y][x].value
               ) {
@@ -222,6 +226,7 @@ class Game2048 {
                 this.score += value;
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               }
             }
           }
@@ -251,6 +256,7 @@ class Game2048 {
 
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               } else if (
                 this.field[y][x - 1].value === this.field[y][x].value
               ) {
@@ -268,6 +274,7 @@ class Game2048 {
                 this.score += value;
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               }
             }
           }
@@ -297,6 +304,7 @@ class Game2048 {
 
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               } else if (
                 this.field[y][x + 1].value === this.field[y][x].value
               ) {
@@ -314,6 +322,7 @@ class Game2048 {
                 this.score += value;
                 moved = true;
                 this.isNewTileNeeded = true;
+                this.isFieldUpdated = true;
               }
             }
           }
@@ -358,6 +367,9 @@ class Game2048 {
         this.field[y][x] = tile
           ? updateTileOutline(tile, this.outlineStep)
           : tile;
+        if(tile && tile.outline.isPlaying) {
+          this.isFieldUpdated = true;
+        }
       });
     });
   }
@@ -386,7 +398,11 @@ class Game2048 {
 
   step() {
     this.calc();
-    this.draw();
+
+    if (this.isFieldUpdated) {
+      this.draw();
+      this.isFieldUpdated = false;
+    }
   }
 
   animate = () => {
@@ -405,6 +421,7 @@ class Game2048 {
 
     this.addRandomTile();
     this.addRandomTile();
+    this.draw();
     this.animate();
   }
 }
