@@ -49,6 +49,30 @@ function roundRect(ctx, x, y, width, height, fill, radius = 5, stroke = true) {
   }
 }
 
+const updateTileOutline = (tile, outlineStep) => {
+  if (!tile.outline.isPlaying) return tile;
+
+  if (tile.outline.isUp) {
+    tile.outline.width += outlineStep;
+
+    if (tile.outline.width >= 4) {
+      tile.outline.width = 4;
+      tile.outline.isUp = false;
+    }
+  } else {
+    tile.outline.width -= outlineStep;
+
+    if (tile.outline.width <= 0) {
+      tile.outline.width = 0;
+      tile.outline.isUp = true;
+
+      tile.outline.isPlaying = false;
+    }
+  }
+
+  return tile;
+};
+
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
