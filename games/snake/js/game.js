@@ -4,6 +4,7 @@ class Snake {
   food;
   direction = "";
   snakeDirection = RIGHT;
+  lastSnakeDirection = this.snakeDirection;
   defaultSnakeSize = 3;
   snakeRemovedTail = null;
 
@@ -126,7 +127,9 @@ class Snake {
   }
 
   updateSnakeAndFood() {
-    if (!this.snakeDirection || this.isPaused) return;
+    if (!this.snakeDirection) return;
+
+    this.lastSnakeDirection = this.snakeDirection;
 
     this.snakeRemovedTail = null;
     const oldHead = this.snake[0];
@@ -162,31 +165,53 @@ class Snake {
     if (this.isCollisionWithSnake(newHead)) {
       this.isGameOver = true;
       this.isPaused = true;
+      return;
     }
 
     this.snake.unshift(newHead);
 
     if (this.isCollisionWithSnake(this.food)) {
       this.dropFood();
-      this.score++;
+      this.onScoreChange(++this.score);
     } else {
       this.snakeRemovedTail = this.snake.pop();
     }
   }
 
   drawSnake() {
-    this.snake.forEach(({ x, y }, index) => {
-      this.ctx.fillStyle = index ? "darkgreen" : "green";
-      this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
-    });
-
     if (this.snakeRemovedTail) {
       const { x, y } = this.snakeRemovedTail;
       this.clearCell(x, y);
+
+      this.ctx.fillStyle = "green";
+      this.ctx.fillRect(
+        this.snake[0].x * this.scale,
+        this.snake[0].y * this.scale,
+        this.scale,
+        this.scale
+      );
+
+      this.ctx.fillStyle = "darkgreen";
+      this.ctx.fillRect(
+        this.snake[1].x * this.scale,
+        this.snake[1].y * this.scale,
+        this.scale,
+        this.scale
+      );
+    } else {
+      this.snake.forEach(({ x, y }, index) => {
+        this.ctx.fillStyle = index ? "darkgreen" : "green";
+        this.ctx.fillRect(
+          x * this.scale,
+          y * this.scale,
+          this.scale,
+          this.scale
+        );
+      });
     }
   }
 
-  calc() {
+  updateInput() {
     if (this.direction === ACTION) {
       this.togglePause();
       this.direction = "";
@@ -195,19 +220,20 @@ class Snake {
     if (this.isPaused) return;
 
     if (
-      (this.snakeDirection === UP && this.direction === DOWN) ||
-      (this.snakeDirection === DOWN && this.direction === UP) ||
-      (this.snakeDirection === LEFT && this.direction === RIGHT) ||
-      (this.snakeDirection === RIGHT && this.direction === LEFT)
+      (this.lastSnakeDirection === UP && this.direction === DOWN) ||
+      (this.lastSnakeDirection === DOWN && this.direction === UP) ||
+      (this.lastSnakeDirection === LEFT && this.direction === RIGHT) ||
+      (this.lastSnakeDirection === RIGHT && this.direction === LEFT)
     ) {
       this.direction = "";
     }
 
     this.snakeDirection = this.direction || this.snakeDirection;
     this.direction = "";
+  }
 
+  calc() {
     this.food = updateTileOutline(this.food);
-
     this.updateSnakeAndFood();
   }
 
@@ -225,13 +251,13 @@ class Snake {
     this.now = Date.now();
     const elapsed = this.now - this.then;
 
+    this.updateInput();
+
     if (elapsed > this.fpsInterval) {
       this.then = this.now - (elapsed % this.fpsInterval);
-
-      this.step();
+      if (!this.isPaused) this.step();
     }
 
-    this.onScoreChange(this.score);
     if (this.isGameOver) {
       this.onGameEnd(this.score);
       return;
@@ -243,13 +269,17 @@ class Snake {
   start() {
     this.direction = "";
     this.snakeDirection = RIGHT;
+    this.lastSnakeDirection = this.snakeDirection;
     this.isGameOver = false;
     this.isPaused = true;
     this.score = 0;
+    this.snakeRemovedTail = null;
 
+    this.onScoreChange(this.score);
     this.initSnake();
     this.dropFood();
     this.drawField();
+    this.draw();
 
     cancelAnimationFrame(this.animationFrameRequest);
     this.then = Date.now();
