@@ -367,7 +367,7 @@ class Game2048 {
         this.field[y][x] = tile
           ? updateTileOutline(tile, this.outlineStep)
           : tile;
-        if(tile && tile.outline.isPlaying) {
+        if (tile && tile.outline.isPlaying) {
           this.isFieldUpdated = true;
         }
       });

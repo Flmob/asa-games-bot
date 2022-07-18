@@ -327,7 +327,7 @@ class FlappyBird {
     const birdRightX = this.birdX + birdWidth;
 
     if (birdBottomY >= this.canvas.height - floorHeight) {
-      this.gameState = gameStates.gameOver;
+      return (this.gameState = gameStates.gameOver);
     }
 
     this.pipes.forEach(({ x, y, passed }, i) => {
