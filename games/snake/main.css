@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  position: fixed;
+
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  overflow: hidden;
+  background-color: black;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+canvas {
+  width: min(100vw, 800px);
+  height: min(50vw, 400px);
+
+  border: 1px solid rgb(0, 255, 17);
+}
+
+.info-board {
+  width: 100%;
+  max-width: 400px;
+
+  padding: 4px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score-wrapper {
+  color: green;
+}
+
+.restart,
+.keyboard-toggle {
+  padding: 4px;
+  background-color: green;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  color: black;
+}
+
+.keyboard-toggle.toggled {
+  background-color: darkgreen;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+}
+
+.keyboard.hidden {
+  display: none;
+}
+
+.keyboard > div {
+  display: flex;
+  flex-direction: row;
+}
+
+.action {
+  background-color: green;
+}
+
+.key {
+  margin: 2px;
+  height: 60px;
+  width: 60px;
+
+  border-radius: 3px;
+  border: 2px solid darkgreen;
+}
