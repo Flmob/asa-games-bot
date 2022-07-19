@@ -29,16 +29,24 @@ class Snake {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    this.scale = Math.max(
-      this.canvas.width / this.fieldWidth,
-      this.canvas.height / this.fieldHeight
-    );
-
     const { onScoreChange = () => {}, onGameEnd = () => {} } = events;
 
     this.onScoreChange = onScoreChange;
     this.onGameEnd = onGameEnd;
   }
+
+  setScale = () => {
+    this.scale = Math.max(
+      this.canvas.width / this.fieldWidth,
+      this.canvas.height / this.fieldHeight
+    );
+
+    console.log(this.canvas.width, this.canvas.height, this.scale);
+
+    this.drawField();
+    this.drawSnake(true);
+    this.drawFood();
+  };
 
   setDirection(action = "") {
     this.direction = action;
@@ -175,8 +183,8 @@ class Snake {
     }
   }
 
-  drawSnake() {
-    if (this.snakeRemovedTail) {
+  drawSnake(forceDraw = false) {
+    if (this.snakeRemovedTail && !forceDraw) {
       const { x, y } = this.snakeRemovedTail;
       this.clearCell(x, y);
 
@@ -275,6 +283,7 @@ class Snake {
     this.onScoreChange(this.score);
     this.initSnake();
     this.dropFood();
+    this.setScale();
     this.drawField();
     this.draw();
 

@@ -1,5 +1,6 @@
 const canvas = document.querySelector("#canvas");
 
+const canvasWrapper = document.querySelector(".canvas-wrapper");
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
@@ -29,7 +30,15 @@ const onGameEnd = (score) => {
 
 const snake = new Snake(canvas, { onScoreChange, onGameEnd });
 
+const setCanvasSize = () => {
+  canvas.width = canvasWrapper.clientWidth - 2;
+  canvas.height = canvasWrapper.clientWidth * 0.5 - 2;
+
+  snake.setScale();
+};
+
 snake.start();
+setCanvasSize();
 
 document.addEventListener("keyup", (e) => {
   snake.setDirection(actions[e.key] || "");
@@ -89,3 +98,5 @@ document.addEventListener("touchend", (e) => {
 
   handleGesture();
 });
+
+window.addEventListener("resize", setCanvasSize, true);
