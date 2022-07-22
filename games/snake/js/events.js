@@ -31,10 +31,12 @@ const onGameEnd = (score) => {
 const snake = new Snake(canvas, { onScoreChange, onGameEnd });
 
 const setCanvasSize = () => {
-  canvas.width = canvasWrapper.clientWidth - 2;
-  canvas.height = canvasWrapper.clientWidth * 0.5 - 2;
+  setTimeout(() => {
+    canvas.width = canvasWrapper.clientWidth - 2;
+    canvas.height = canvasWrapper.clientWidth * 0.5 - 2;
 
-  snake.setScale();
+    snake.setScale();
+  }, 50);
 };
 
 snake.start();
