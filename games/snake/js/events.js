@@ -46,7 +46,10 @@ document.addEventListener("keyup", (e) => {
   snake.setDirection(actions[e.key] || "");
 });
 
-restartBtn.addEventListener("click", () => snake.start());
+restartBtn.addEventListener("click", () => {
+  const response = confirm("Do you really want to restart?");
+  if (response) snake.start();
+});
 
 keyboardToggleBtn.addEventListener("click", () => {
   isKeyboardVisible = !isKeyboardVisible;

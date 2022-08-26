@@ -37,7 +37,10 @@ document.addEventListener("keyup", (e) => {
   game2048.setDirection(actions[e.key] || "");
 });
 
-restartBtn.addEventListener("click", () => game2048.start());
+restartBtn.addEventListener("click", () => {
+  const response = confirm("Do you really want to restart?");
+  if (response) game2048.start();
+});
 
 keyboardToggleBtn.addEventListener("click", () => {
   isKeyboardVisible = !isKeyboardVisible;
