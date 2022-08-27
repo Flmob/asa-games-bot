@@ -41,8 +41,6 @@ class Snake {
       this.canvas.height / this.fieldHeight
     );
 
-    console.log(this.canvas.width, this.canvas.height, this.scale);
-
     this.drawField();
     this.drawSnake(true);
     this.drawFood();
