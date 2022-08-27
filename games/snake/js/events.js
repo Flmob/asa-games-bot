@@ -19,6 +19,11 @@ let touchendY = 0;
 
 let isKeyboardVisible = false;
 
+const url = new URL(location.href);
+const params = Object.fromEntries(url.searchParams);
+
+console.log(url, params);
+
 const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
@@ -105,3 +110,6 @@ document.addEventListener("touchend", (e) => {
 });
 
 window.addEventListener("resize", setCanvasSize, true);
+
+
+// https://shielded-woodland-35441.herokuapp.com/snake/#tgShareScoreUrl=tg%3A%2F%2Fshare_game_score%3Fhash%3DPmIcHiHmv0Wx4uEtfbitQkYwqymq4EZ3S_jnUtkYj4VugC9U7f6wnfhmscpjIeLT
