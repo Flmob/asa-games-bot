@@ -42,6 +42,11 @@ class FlappyBird {
 
   gameState = gameStates.startScreen;
 
+  //for FPS control
+  animationFrameRequest;
+  then;
+  now;
+
   pipes = [
     { x: 0, y: 0, passed: false },
     { x: 0, y: 0, passed: false },
@@ -110,7 +115,7 @@ class FlappyBird {
 
   initGame() {
     this.gameScore = 0;
-    this.birdX = this.canvas.width / 2 - birdWidth / 2;
+    this.birdX = this.canvas.width / 2 - birdWidth * 2;
     this.birdY = this.canvas.height / 2 - birdHeight;
     this.birdAngle = 0;
     this.birdVelocity = 0;
@@ -331,6 +336,8 @@ class FlappyBird {
     }
 
     this.pipes.forEach(({ x, y, passed }, i) => {
+      if (passed) return;
+
       const hasHorizontalCollision = () =>
         (this.birdX > x + pipeHeadGap &&
           this.birdX < x + pipeHeadGap + pipeWidth) ||
@@ -353,14 +360,13 @@ class FlappyBird {
           birdBottomY < y + pipesGapH + pipeHeadHeight);
 
       if (
-        !passed &&
-        ((hasVerticalHeadCollision() && hasHorizontalHeadCollision()) ||
-          (hasHorizontalCollision() && hasVerticalCollision()))
+        (hasVerticalHeadCollision() && hasHorizontalHeadCollision()) ||
+        (hasHorizontalCollision() && hasVerticalCollision())
       ) {
         this.gameState = gameStates.gameOver;
       }
 
-      if (!passed && x + pipeHeadWidth < this.birdX) {
+      if (x + pipeHeadWidth < this.birdX) {
         this.gameScore++;
         this.pipes[i].passed = true;
       }
@@ -427,6 +433,7 @@ class FlappyBird {
       this.drawFloor();
       this.drawBird();
       this.drawGameOverText();
+      this.drawGameScore();
     }
   }
 
@@ -438,7 +445,13 @@ class FlappyBird {
   // functions that will be used outside of the class
   // should be arrow to not lose context
   animate = () => {
-    this.step();
+    this.now = Date.now();
+    const elapsed = this.now - this.then;
+
+    if (elapsed > fpsInterval) {
+      this.then = this.now - (elapsed % fpsInterval);
+      this.step();
+    }
 
     requestAnimationFrame(this.animate);
   };
@@ -446,6 +459,9 @@ class FlappyBird {
   start() {
     this.initData();
     this.initGame();
+
+    cancelAnimationFrame(this.animationFrameRequest);
+    this.then = Date.now();
     this.animate();
   }
 

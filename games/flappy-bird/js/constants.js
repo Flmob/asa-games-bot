@@ -19,14 +19,14 @@ const gameOverTextY = logoY;
 const gameOverTextHeight = 65;
 const gameOverTextWidth = gameOverTextHeight * 4.46;
 const floorHeight = 100;
-const birdWidth = 60;
-const birdHeight = 45;
+const birdWidth = 48;
+const birdHeight = 35;
 const pipeHeadWidth = birdHeight * 2;
 const pipeHeadHeight = 40;
 const pipeHeadGap = 4; // gap of pipe 'head' on each side
 const pipeWidth = pipeHeadWidth - pipeHeadGap * 2;
 const pipeHeight = pipeHeadWidth * 6;
-const pipesGapH = birdHeight * 3.5;
+const pipesGapH = birdHeight * 3.7;
 const pipesGapW = pipeHeadWidth * 2.5;
 const pipesRenderGap = pipeHeadWidth + pipesGapW;
 const bigNumberWidth = 30;
@@ -42,6 +42,9 @@ const birdUpMaxAngle = -35;
 const birdDownMaxAngle = 90;
 const gravityForce = 2;
 const actionVelocity = 19;
+
+const fps = 60;
+const fpsInterval = 1000 / fps;
 
 const gameStates = {
   startScreen: "startScreen",
