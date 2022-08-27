@@ -3,7 +3,17 @@ const keys = {
   Space: true,
 };
 
-const spritesPath = "./assets/atlas.png";
+const spritesPath = "./assets/img/atlas.png";
+const soundsPath = "./assets/audio";
+
+const audioExtension = "wav";
+const soundsNames = [
+  "sfx_die",
+  "sfx_flap",
+  "sfx_hit",
+  "sfx_point",
+  "sfx_swooshing",
+];
 
 // px
 const logoY = 80;
@@ -23,7 +33,7 @@ const birdWidth = 48;
 const birdHeight = 35;
 const pipeHeadWidth = birdHeight * 2;
 const pipeHeadHeight = 40;
-const pipeHeadGap = 4; // gap of pipe 'head' on each side
+const pipeHeadGap = 2; // gap of pipe 'head' on each side
 const pipeWidth = pipeHeadWidth - pipeHeadGap * 2;
 const pipeHeight = pipeHeadWidth * 6;
 const pipesGapH = birdHeight * 3.7;

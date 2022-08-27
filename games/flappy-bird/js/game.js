@@ -21,6 +21,7 @@ class FlappyBird {
   backgroundOffset = 0;
   floorOffset = 0;
   spritesObj = {};
+  sounds = {};
 
   birdSprites = [];
   birdSpriteIndex = 0;
@@ -82,6 +83,15 @@ class FlappyBird {
         this.onGameReady,
         sprites[name]
       );
+    });
+
+    soundsNames.forEach((name) => {
+      const shortName = name.split("_")[1];
+
+      this.sounds[shortName] = new Audio(
+        `${soundsPath}/${name}.${audioExtension}`
+      );
+      this.sounds[shortName].volume = 0.1;
     });
 
     this.birdSprites = [
@@ -282,6 +292,11 @@ class FlappyBird {
     }
 
     if (this.gameState === gameStates.playing) {
+      if (this.hasAction) {
+        this.sounds.flap.play();
+        this.birdVelocity = actionVelocity;
+      }
+
       this.birdVelocity -= gravityForce;
 
       if (this.birdVelocity < -gravityForce * 2) {
@@ -332,7 +347,9 @@ class FlappyBird {
     const birdRightX = this.birdX + birdWidth;
 
     if (birdBottomY >= this.canvas.height - floorHeight) {
-      return (this.gameState = gameStates.gameOver);
+      this.sounds.die.play();
+      this.gameState = gameStates.gameOver;
+      return;
     }
 
     this.pipes.forEach(({ x, y, passed }, i) => {
@@ -363,11 +380,13 @@ class FlappyBird {
         (hasVerticalHeadCollision() && hasHorizontalHeadCollision()) ||
         (hasHorizontalCollision() && hasVerticalCollision())
       ) {
+        this.sounds.hit.play();
         this.gameState = gameStates.gameOver;
       }
 
       if (x + pipeHeadWidth < this.birdX) {
         this.gameScore++;
+        this.sounds.point.play();
         this.pipes[i].passed = true;
       }
     });
@@ -377,6 +396,7 @@ class FlappyBird {
     if (this.gameState === gameStates.startScreen) {
       if (this.hasAction) {
         this.initGame();
+        this.sounds.swooshing.play();
         this.gameState = gameStates.playing;
       }
 
@@ -387,10 +407,6 @@ class FlappyBird {
     }
 
     if (this.gameState === gameStates.playing) {
-      if (this.hasAction) {
-        this.birdVelocity = actionVelocity;
-      }
-
       this.calcBackground();
       this.calcPipes();
       this.calcFloor();
