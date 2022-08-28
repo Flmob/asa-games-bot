@@ -1,4 +1,7 @@
-//TODO: create tile class
+// TODO: 
+//  - create tile class
+//  - add "You won" message
+
 
 class Game2048 {
   field;

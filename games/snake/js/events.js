@@ -22,8 +22,6 @@ let isKeyboardVisible = false;
 const url = new URL(location.href);
 const params = Object.fromEntries(url.searchParams);
 
-console.log(url, params);
-
 const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
@@ -31,6 +29,14 @@ const onScoreChange = (score) => {
 const onGameEnd = (score) => {
   const message = `You've lost! Your score is ${score}`;
   console.log(message);
+
+  fetch("/setscore", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...params, score }),
+  }).then((res, err) => {
+    console.log({ res, err });
+  });
 };
 
 const snake = new Snake(canvas, { onScoreChange, onGameEnd });
@@ -110,6 +116,3 @@ document.addEventListener("touchend", (e) => {
 });
 
 window.addEventListener("resize", setCanvasSize, true);
-
-
-// https://shielded-woodland-35441.herokuapp.com/snake/#tgShareScoreUrl=tg%3A%2F%2Fshare_game_score%3Fhash%3DPmIcHiHmv0Wx4uEtfbitQkYwqymq4EZ3S_jnUtkYj4VugC9U7f6wnfhmscpjIeLT

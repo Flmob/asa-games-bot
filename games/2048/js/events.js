@@ -10,6 +10,9 @@ const downBtn = document.querySelector(".down");
 const leftBtn = document.querySelector(".left");
 const rightBtn = document.querySelector(".right");
 
+const url = new URL(location.href);
+const params = Object.fromEntries(url.searchParams);
+
 let touchstartX = 0;
 let touchendX = 0;
 let touchstartY = 0;
@@ -24,6 +27,14 @@ const onScoreChange = (score) => {
 const onGameEnd = (score) => {
   const message = `You've lost! Your score is ${score}`;
   console.log(message);
+
+  fetch("/setscore", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...params, score }),
+  }).then((res, err) => {
+    console.log({ res, err });
+  });
 };
 
 const game2048 = new Game2048(canvas, {

@@ -3,22 +3,24 @@ import { Telegraf, Markup } from "telegraf";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
+const mainUrl = "https://shielded-woodland-35441.herokuapp.com";
+
 const games = {
   asa2048: {
     game_short_name: "asa2048",
-    url: "https://shielded-woodland-35441.herokuapp.com/2048/",
+    url: `${mainUrl}/2048/`,
   },
   t_rex: {
     game_short_name: "t_rex",
-    url: "https://shielded-woodland-35441.herokuapp.com/t-rex/",
+    url: `${mainUrl}/t-rex/`,
   },
   snake: {
     game_short_name: "snake",
-    url: "https://shielded-woodland-35441.herokuapp.com/snake/",
+    url: `${mainUrl}/snake/`,
   },
   flappy_bird: {
     game_short_name: "flappy_bird",
-    url: "https://shielded-woodland-35441.herokuapp.com/flappy-bird/",
+    url: `${mainUrl}/flappy-bird/`,
   },
 };
 
@@ -79,12 +81,28 @@ bot.gameQuery((ctx) => {
   console.log("callbackQuery", ctx.callbackQuery);
 
   const {
-    callbackQuery: { game_short_name, chat_instance },
+    callbackQuery: {
+      game_short_name,
+      chat_instance,
+      message,
+      inline_message_id,
+    },
   } = ctx;
 
-  const uid = ctx.from.id;
+  const user_id = ctx.from.id;
   const gameUrl = games[game_short_name].url || "/";
-  let url = `${gameUrl}?uid=${uid}&chat_inst=${chat_instance || "0"}`;
+  let url = "";
+
+  if (message) {
+    const msgId = message.message_id;
+    const chatId = ctx.chat.id;
+    url = `${gameUrl}?user_id=${user_id}&chat_id=${chatId}&message_id=${msgId}`;
+  } else if (inline_message_id) {
+    url = `${gameUrl}?user_id=${user_id}&inline_message_id=${inline_message_id}`;
+  } else {
+    console.log("No detail for update from callback query.");
+    url = gameUrl;
+  }
 
   return ctx.answerGameQuery(url);
 });
