@@ -77,27 +77,14 @@ bot.command("flappy_bird", (ctx) => {
 
 bot.gameQuery((ctx) => {
   console.log("callbackQuery", ctx.callbackQuery);
-  console.log({from: ctx.from, chat: ctx.chat});
 
   const {
-    callbackQuery: { game_short_name, message, inline_message_id },
+    callbackQuery: { game_short_name, chat_instance },
   } = ctx;
 
   const uid = ctx.from.id;
   const gameUrl = games[game_short_name].url || "/";
-  let url = "";
-
-  if (message) {
-    const msgId = message.message_id;
-    const chatId = ctx.chat.id;
-    url = `${gameUrl}?uid=${uid}&chatid=${chatId}&msgid=${msgId}`;
-  } else if (inline_message_id) {
-    const iid = inline_message_id;
-    url = `${gameUrl}?uid=${uid}&iid=${iid}`;
-  } else {
-    console.log("No detail for update from callback query.");
-    url = gameUrl;
-  }
+  let url = `${gameUrl}?uid=${uid}&chat_inst=${chat_instance || "0"}`;
 
   return ctx.answerGameQuery(url);
 });
