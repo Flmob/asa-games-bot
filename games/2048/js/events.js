@@ -25,16 +25,19 @@ const onScoreChange = (score) => {
 };
 
 const onGameEnd = (score) => {
-  const message = `You've lost! Your score is ${score}`;
-  console.log(message);
+  const message = `You've lost! Your score is ${score}.`;
 
   fetch("/setscore", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...params, score }),
-  }).then((res, err) => {
-    console.log({ res, err });
-  });
+  })
+    .then((res) => {
+      alert(message);
+    })
+    .catch((err) => {
+      alert(`${message}\nSorry, couldn't save your new score`);
+    });
 };
 
 const game2048 = new Game2048(canvas, {

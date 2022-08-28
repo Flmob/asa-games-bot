@@ -12,6 +12,9 @@ const leftBtn = document.querySelector(".left");
 const rightBtn = document.querySelector(".right");
 const centerBtn = document.querySelector(".center");
 
+const url = new URL(location.href);
+const params = Object.fromEntries(url.searchParams);
+
 let touchstartX = 0;
 let touchendX = 0;
 let touchstartY = 0;
@@ -19,24 +22,24 @@ let touchendY = 0;
 
 let isKeyboardVisible = false;
 
-const url = new URL(location.href);
-const params = Object.fromEntries(url.searchParams);
-
 const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
 
 const onGameEnd = (score) => {
-  const message = `You've lost! Your score is ${score}`;
-  console.log(message);
+  const message = `You've lost! Your score is ${score}.`;
 
   fetch("/setscore", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...params, score }),
-  }).then((res, err) => {
-    console.log({ res, err });
-  });
+  })
+    .then((res) => {
+      alert(message);
+    })
+    .catch((err) => {
+      alert(`${message}\nSorry, couldn't save your new score`);
+    });
 };
 
 const snake = new Snake(canvas, { onScoreChange, onGameEnd });
