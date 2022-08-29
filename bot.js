@@ -81,12 +81,7 @@ bot.gameQuery((ctx) => {
   console.log("callbackQuery", ctx.callbackQuery);
 
   const {
-    callbackQuery: {
-      game_short_name,
-      chat_instance,
-      message,
-      inline_message_id,
-    },
+    callbackQuery: { game_short_name, message, inline_message_id },
   } = ctx;
 
   const user_id = ctx.from.id;

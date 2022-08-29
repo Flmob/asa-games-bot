@@ -1,7 +1,6 @@
-// TODO: 
+// TODO:
 //  - create tile class
-//  - add "You won" message
-
+//  - optimize getEmptyTiles usage
 
 class Game2048 {
   field;
@@ -12,6 +11,8 @@ class Game2048 {
   isFieldUpdated = false;
   isNewTileNeeded = false;
   isGameOver = false;
+  isWon = false;
+  isOnGameWinFired = false;
 
   canvas;
   ctx;
@@ -20,15 +21,21 @@ class Game2048 {
 
   onScoreChange;
   onGameEnd;
+  onGameWin;
 
   constructor(canvas, events = {}, params = {}) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    const { onScoreChange = () => {}, onGameEnd = () => {} } = events;
+    const {
+      onScoreChange = () => {},
+      onGameEnd = () => {},
+      onGameWin = () => {},
+    } = events;
 
     this.onScoreChange = onScoreChange;
     this.onGameEnd = onGameEnd;
+    this.onGameWin = onGameWin;
 
     const { fieldSize = 4, outlineStep = 0.4 } = params;
 
@@ -373,6 +380,9 @@ class Game2048 {
         if (tile && tile.outline.isPlaying) {
           this.isFieldUpdated = true;
         }
+        if (!this.isWon && tile && tile.value === 2048) {
+          this.isWon = true;
+        }
       });
     });
   }
@@ -391,12 +401,6 @@ class Game2048 {
         );
       });
     });
-
-    this.onScoreChange(this.score);
-    if (this.isGameOver) {
-      this.onGameEnd(this.score);
-      this.isGameOver = false;
-    }
   }
 
   step() {
@@ -405,7 +409,17 @@ class Game2048 {
     if (this.isFieldUpdated) {
       this.draw();
       this.isFieldUpdated = false;
+    } else if (this.isWon && !this.isOnGameWinFired) {
+      this.onGameWin(this.score);
+      this.isOnGameWinFired = true;
     }
+
+    if (this.isGameOver) {
+      this.onGameEnd(this.score);
+      this.isGameOver = false;
+    }
+
+    this.onScoreChange(this.score);
   }
 
   animate = () => {
@@ -416,11 +430,13 @@ class Game2048 {
 
   start() {
     this.isGameOver = false;
+    this.isWon = false;
+    this.isOnGameWinFired = false;
+    this.score = 0;
+
     this.field = new Array(this.fieldSize)
       .fill(0)
       .map(() => new Array(this.fieldSize).fill(undefined));
-
-    this.score = 0;
 
     this.addRandomTile();
     this.addRandomTile();

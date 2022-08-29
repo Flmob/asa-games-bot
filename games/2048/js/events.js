@@ -40,9 +40,16 @@ const onGameEnd = (score) => {
     });
 };
 
+const onGameWin = (score) => {
+  const message = `You've won! Your score is ${score}.`;
+
+  alert(message);
+};
+
 const game2048 = new Game2048(canvas, {
   onScoreChange,
   onGameEnd,
+  onGameWin,
 });
 
 game2048.start();
