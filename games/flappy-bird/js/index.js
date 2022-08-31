@@ -6,6 +6,8 @@ const params = Object.fromEntries(url.searchParams);
 const onGameEnd = (score) => {
   const message = `You've lost! Your score is ${score}.`;
 
+  if (!score) return;
+
   fetch("/setscore", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
