@@ -382,6 +382,7 @@ class FlappyBird {
       ) {
         this.sounds.hit.play();
         this.gameState = gameStates.gameOver;
+        this.onGameEnd(this.gameScore);
       }
 
       if (x + pipeHeadWidth < this.birdX) {
