@@ -1,6 +1,7 @@
 // TODO:
 //  - create tile class
 //  - optimize getEmptyTiles usage
+//  - fix tiles positioning on some screens
 
 class Game2048 {
   field;

@@ -108,12 +108,24 @@ const handleGesture = () => {
   }
 };
 
-document.addEventListener("touchstart", (e) => {
+keyboard.addEventListener("touchstart", (e) => {
   touchstartX = e.changedTouches[0].screenX;
   touchstartY = e.changedTouches[0].screenY;
 });
 
-document.addEventListener("touchend", (e) => {
+keyboard.addEventListener("touchend", (e) => {
+  touchendX = e.changedTouches[0].screenX;
+  touchendY = e.changedTouches[0].screenY;
+
+  handleGesture();
+});
+
+canvas.addEventListener("touchstart", (e) => {
+  touchstartX = e.changedTouches[0].screenX;
+  touchstartY = e.changedTouches[0].screenY;
+});
+
+canvas.addEventListener("touchend", (e) => {
   touchendX = e.changedTouches[0].screenX;
   touchendY = e.changedTouches[0].screenY;
 
