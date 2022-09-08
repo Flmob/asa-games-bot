@@ -1,7 +1,6 @@
 // TODO:
 //  - create tile class
-//  - optimize getEmptyTiles usage
-//  - fix tiles positioning on some screens
+//  - optimize isTileWithSameNear function
 
 class Game2048 {
   field;
@@ -105,10 +104,9 @@ class Game2048 {
     return result;
   }
 
-  addRandomTile() {
+  addRandomTile(emptyTiles) {
     const value = Math.random() > 0.1 ? 2 : 4;
 
-    const emptyTiles = this.getEmptyTiles();
     const randomIndex = getRandomInt(0, emptyTiles.length - 1);
 
     const { x, y } = emptyTiles[randomIndex];
@@ -359,10 +357,11 @@ class Game2048 {
       this.direction = "";
 
       if (this.isNewTileNeeded) {
-        this.addRandomTile();
         this.isNewTileNeeded = false;
-
         const emptyTiles = this.getEmptyTiles();
+
+        this.addRandomTile(emptyTiles);
+
         if (!emptyTiles.length && !this.isTileWithSameNear()) {
           this.isGameOver = true;
         }
@@ -439,8 +438,9 @@ class Game2048 {
       .fill(0)
       .map(() => new Array(this.fieldSize).fill(undefined));
 
-    this.addRandomTile();
-    this.addRandomTile();
+    const emptyTiles = this.getEmptyTiles();
+    this.addRandomTile(emptyTiles);
+    this.addRandomTile(emptyTiles);
     this.draw();
     this.animate();
   }
