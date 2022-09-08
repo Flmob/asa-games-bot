@@ -6,6 +6,7 @@
 class Game2048 {
   field;
   tileSize;
+  tilePadding = 4;
   outlineStep;
   score = 0;
   direction = ""; //up, down, left, right
@@ -42,11 +43,6 @@ class Game2048 {
 
     this.fieldSize = fieldSize;
     this.outlineStep = outlineStep;
-
-    this.tileSize = Math.min(
-      this.canvas.clientHeight / fieldSize,
-      this.canvas.clientWidth / fieldSize
-    );
   }
 
   setDirection(action) {
@@ -126,10 +122,10 @@ class Game2048 {
 
     roundRect(
       this.ctx,
-      x + 4 - outline,
-      y + 4 - outline,
-      this.tileSize - 8 + outline * 2,
-      this.tileSize - 8 + outline * 2,
+      x + this.tilePadding - outline,
+      y + this.tilePadding - outline,
+      this.tileSize - this.tilePadding * 2 + outline * 2,
+      this.tileSize - this.tilePadding * 2 + outline * 2,
       true
     );
 
@@ -434,6 +430,10 @@ class Game2048 {
     this.isWon = false;
     this.isOnGameWinFired = false;
     this.score = 0;
+    this.tileSize = Math.min(
+      this.canvas.width / this.fieldSize,
+      this.canvas.height / this.fieldSize
+    );
 
     this.field = new Array(this.fieldSize)
       .fill(0)
