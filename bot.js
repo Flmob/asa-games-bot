@@ -36,7 +36,7 @@ const gamesQueryArray = Object.values(games).map(({ game_short_name }, id) => ({
 }));
 
 bot.command("start", (ctx) => {
-  console.log(ctx.from);
+  console.log({ ...ctx.from, date: new Date() });
   bot.telegram.sendMessage(
     ctx.chat.id,
     "Hello there! Welcome to Asa Games Bot.",
@@ -45,40 +45,40 @@ bot.command("start", (ctx) => {
 });
 
 bot.on("inline_query", (ctx) => {
-  console.log(ctx.inlineQuery);
+  console.log({ ...ctx.inlineQuery, date: new Date() });
   return ctx.answerInlineQuery(gamesQueryArray);
 });
 
 bot.command("2048", (ctx) => {
   console.log("GAME 2048");
-  console.log(ctx.from);
+  console.log({ ...ctx.from, date: new Date() });
 
   return ctx.replyWithGame(games.asa2048.game_short_name, reply_markup);
 });
 
 bot.command("t-rex", (ctx) => {
   console.log("GAME t-rex");
-  console.log(ctx.from);
+  console.log({ ...ctx.from, date: new Date() });
 
   return ctx.replyWithGame(games.tRex.game_short_name, reply_markup);
 });
 
 bot.command("snake", (ctx) => {
   console.log("GAME snake");
-  console.log(ctx.from);
+  console.log({ ...ctx.from, date: new Date() });
 
   return ctx.replyWithGame(games.snake.game_short_name, reply_markup);
 });
 
 bot.command("flappy_bird", (ctx) => {
   console.log("GAME flappy_bird");
-  console.log(ctx.from);
+  console.log({ ...ctx.from, date: new Date() });
 
   return ctx.replyWithGame(games.flappy_bird.game_short_name, reply_markup);
 });
 
 bot.gameQuery((ctx) => {
-  console.log("callbackQuery", ctx.callbackQuery);
+  console.log("callbackQuery", { ...ctx.callbackQuery, date: new Date() });
 
   const {
     callbackQuery: { game_short_name, message, inline_message_id },
@@ -95,7 +95,7 @@ bot.gameQuery((ctx) => {
   } else if (inline_message_id) {
     url = `${gameUrl}?user_id=${user_id}&inline_message_id=${inline_message_id}`;
   } else {
-    console.log("No detail for update from callback query.");
+    console.log("No detail for update from callback query.", new Date());
     url = gameUrl;
   }
 
