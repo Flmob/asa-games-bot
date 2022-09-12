@@ -15,6 +15,8 @@ class Game2048 {
   isWon = false;
   isOnGameWinFired = false;
 
+  animationFrameRequest;
+
   canvas;
   ctx;
 
@@ -421,7 +423,7 @@ class Game2048 {
   animate = () => {
     this.step();
 
-    requestAnimationFrame(this.animate);
+    this.animationFrameRequest = requestAnimationFrame(this.animate);
   };
 
   start() {
@@ -442,6 +444,8 @@ class Game2048 {
     this.addRandomTile(emptyTiles);
     this.addRandomTile(emptyTiles);
     this.draw();
+
+    cancelAnimationFrame(this.animationFrameRequest);
     this.animate();
   }
 }
