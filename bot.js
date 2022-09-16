@@ -22,6 +22,10 @@ const games = {
     game_short_name: "flappy_bird",
     url: `${mainUrl}/flappy-bird/`,
   },
+  tetris: {
+    game_short_name: "tetris",
+    url: `${mainUrl}/tetris/`,
+  },
 };
 
 const type = "game";
@@ -75,6 +79,13 @@ bot.command("flappy_bird", (ctx) => {
   console.log({ ...ctx.from, date: new Date() });
 
   return ctx.replyWithGame(games.flappy_bird.game_short_name, reply_markup);
+});
+
+bot.command("tetris", (ctx) => {
+  console.log("GAME tetris");
+  console.log({ ...ctx.from, date: new Date() });
+
+  return ctx.replyWithGame(games.tetris.game_short_name, reply_markup);
 });
 
 bot.gameQuery((ctx) => {

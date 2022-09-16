@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tetris</title>
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="visible-zone">
+        <div class="canvas-wrapper">
+          <canvas id="tetris" width="200" height="400"></canvas>
+        </div>
+      </div>
+
+      <div class="info-board">
+        <div class="score-wrapper">Score: <span class="score">0</span></div>
+
+        <button class="restart">Restart</button>
+
+        <button class="keyboard-toggle" disabled>Keyboard</button>
+      </div>
+    </div>
+
+    <script src="./js/tetrominoes.js"></script>
+    <script src="./js/helpers.js"></script>
+    <script src="./js/constants.js"></script>
+    <script src="./js/Piece.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
