@@ -4,10 +4,6 @@ const ctx = canvas.getContext("2d");
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
 
-const SQ = 20; // square size
-const ROWS = 20;
-const COLUMNS = 10;
-const VACANT = "white";
 let gameOver = false;
 let score = 0;
 let dropStart = Date.now();
@@ -26,14 +22,16 @@ const pieces = [
 let board = [];
 
 initBoard = () => {
-  board = new Array(ROWS).fill([]).map((_) => new Array(COLUMNS).fill(VACANT));
+  board = new Array(rowsCount)
+    .fill([])
+    .map((_) => new Array(columnsCount).fill(vacantColor));
 };
 
 const drawSquare = (x, y, color) => {
   ctx.fillStyle = color;
-  ctx.fillRect(x * SQ, y * SQ, SQ, SQ);
+  ctx.fillRect(x * squareSize, y * squareSize, squareSize, squareSize);
   ctx.strokeStyle = "black";
-  ctx.strokeRect(x * SQ, y * SQ, SQ, SQ);
+  ctx.strokeRect(x * squareSize, y * squareSize, squareSize, squareSize);
 };
 
 const drawBoard = () => {
@@ -41,11 +39,11 @@ const drawBoard = () => {
 };
 
 const removeFullRow = () => {
-  for (let r = 0; r < ROWS; r++) {
+  for (let r = 0; r < rowsCount; r++) {
     let isRowFull = true;
 
-    for (let c = 0; c < COLUMNS; c++) {
-      if (board[r][c] === VACANT) {
+    for (let c = 0; c < columnsCount; c++) {
+      if (board[r][c] === vacantColor) {
         isRowFull = false;
         break;
       }
@@ -53,7 +51,7 @@ const removeFullRow = () => {
 
     if (isRowFull) {
       board.splice(r, 1);
-      board.unshift(new Array(COLUMNS).fill(VACANT));
+      board.unshift(new Array(columnsCount).fill(vacantColor));
       score += 10;
       scoreSpan.innerHTML = score;
     }

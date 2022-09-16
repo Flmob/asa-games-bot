@@ -23,7 +23,7 @@ class Piece {
         const newX = this.x + c + x;
         const newY = this.y + r + y;
 
-        if (newX < 0 || newX >= COLUMNS || newY >= ROWS) {
+        if (newX < 0 || newX >= columnsCount || newY >= rowsCount) {
           return true;
         }
 
@@ -31,7 +31,7 @@ class Piece {
           continue;
         }
 
-        if (board[newY][newX] !== VACANT) {
+        if (board[newY][newX] !== vacantColor) {
           return true;
         }
       }
@@ -55,7 +55,7 @@ class Piece {
   }
 
   unDraw() {
-    this.fill(VACANT);
+    this.fill(vacantColor);
   }
 
   moveDown() {
@@ -90,7 +90,7 @@ class Piece {
     let kick = 0;
 
     if (this.collision(0, 0, nextPattern)) {
-      if (this.x > COLUMNS / 2) {
+      if (this.x > columnsCount / 2) {
         kick = -1;
       } else {
         kick = 1;

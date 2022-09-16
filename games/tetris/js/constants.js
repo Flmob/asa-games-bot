@@ -13,3 +13,8 @@ const actions = {
   ArrowDown: "ArrowDown",
   ArrowLeft: "ArrowLeft",
 };
+
+squareSize = 20;
+rowsCount = 20;
+columnsCount = 10;
+vacantColor = 'white';
