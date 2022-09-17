@@ -1,9 +1,19 @@
 class Piece {
-  constructor(tetromino, color, options = {}) {
-    const { onLock = () => {}, onGameOver = () => {} } = options;
+  constructor(options = {}) {
+    const {
+      tetromino,
+      color,
+      ctx,
+      board,
+      onLock = () => {},
+      onGameOver = () => {},
+    } = options;
+
     this.onLock = onLock;
     this.onGameOver = onGameOver;
 
+    this.ctx = ctx;
+    this.board = board;
     this.tetromino = tetromino;
     this.tetrominoN = 0;
     this.activeTetromino = this.tetromino[this.tetrominoN];
@@ -31,7 +41,7 @@ class Piece {
           continue;
         }
 
-        if (board[newY][newX] !== vacantColor) {
+        if (this.board[newY][newX] !== vacantColor) {
           return true;
         }
       }
@@ -44,7 +54,7 @@ class Piece {
     for (let r = 0; r < this.length; r++) {
       for (let c = 0; c < this.length; c++) {
         if (this.activeTetromino[r][c]) {
-          drawSquare(c + this.x, r + this.y, color);
+          drawSquare(this.ctx, c + this.x, r + this.y, color);
         }
       }
     }
@@ -116,7 +126,7 @@ class Piece {
           this.onGameOver();
           break;
         }
-        board[this.y + r][this.x + c] = this.color;
+        this.board[this.y + r][this.x + c] = this.color;
       }
     }
     this.onLock();

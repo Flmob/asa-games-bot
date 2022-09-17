@@ -1,133 +1,119 @@
 const canvas = document.getElementById("tetris");
-const ctx = canvas.getContext("2d");
 
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
+const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
+const keyboard = document.querySelector(".keyboard");
 
-let gameOver = false;
-let score = 0;
-let dropStart = Date.now();
-let animationFrameRequest;
+const upBtn = document.querySelector(".up");
+const downBtn = document.querySelector(".down");
+const leftBtn = document.querySelector(".left");
+const rightBtn = document.querySelector(".right");
+const centerBtn = document.querySelector(".center");
 
-const pieces = [
-  [Z, "red"],
-  [S, "green"],
-  [T, "yellow"],
-  [O, "blue"],
-  [L, "purple"],
-  [I, "cyan"],
-  [J, "orange"],
-];
+const url = new URL(location.href);
+const params = Object.fromEntries(url.searchParams);
 
-let board = [];
+let touchstartX = 0;
+let touchendX = 0;
+let touchstartY = 0;
+let touchendY = 0;
 
-initBoard = () => {
-  board = new Array(rowsCount)
-    .fill([])
-    .map((_) => new Array(columnsCount).fill(vacantColor));
-};
+let isKeyboardVisible = false;
 
-const drawSquare = (x, y, color) => {
-  ctx.fillStyle = color;
-  ctx.fillRect(x * squareSize, y * squareSize, squareSize, squareSize);
-  ctx.strokeStyle = "black";
-  ctx.strokeRect(x * squareSize, y * squareSize, squareSize, squareSize);
-};
-
-const drawBoard = () => {
-  board.forEach((row, y) => row.forEach((color, x) => drawSquare(x, y, color)));
-};
-
-const removeFullRow = () => {
-  for (let r = 0; r < rowsCount; r++) {
-    let isRowFull = true;
-
-    for (let c = 0; c < columnsCount; c++) {
-      if (board[r][c] === vacantColor) {
-        isRowFull = false;
-        break;
-      }
-    }
-
-    if (isRowFull) {
-      board.splice(r, 1);
-      board.unshift(new Array(columnsCount).fill(vacantColor));
-      score += 10;
-      scoreSpan.innerHTML = score;
-    }
-  }
-
-  drawBoard();
-};
-
-function control(e) {
-  if (e.key === actions.ArrowLeft) {
-    piece.moveLeft();
-    dropStart = Date.now();
-  } else if (e.key === actions.ArrowRight) {
-    piece.moveRight();
-    dropStart = Date.now();
-  } else if (e.key === actions.ArrowDown) {
-    piece.moveDown();
-  } else if (e.key === actions.ArrowUp) {
-    piece.rotate();
-    dropStart = Date.now();
-  }
-}
-
-document.addEventListener("keydown", control);
-
-drawBoard();
-
-const drop = () => {
-  const now = Date.now();
-  const delta = now - dropStart;
-
-  if (delta > 300) {
-    piece.moveDown();
-    dropStart = now;
-  }
-
-  if (!gameOver) {
-    animationFrameRequest = requestAnimationFrame(drop);
-  }
-};
-
-const getRandomPiece = () => {
-  const newPiece = pieces[getRandomInt(0, pieces.length)];
-  return new Piece(newPiece[0], newPiece[1], {
-    onLock: () => {
-      if (gameOver) return;
-      cancelAnimationFrame(animationFrameRequest);
-      removeFullRow();
-      piece = getRandomPiece();
-      piece.draw();
-      drop();
-    },
-    onGameOver: () => {
-      gameOver = true;
-    },
-  });
-};
-
-const start = () => {
-  gameOver = false;
-
-  score = 0;
+const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
-
-  initBoard();
-  drawBoard();
-
-  piece = getRandomPiece();
-  piece.draw();
-
-  drop();
 };
+
+const onGameOver = (score) => {
+  const message = `You've lost! Your score is ${score}.`;
+
+  if (!score) return;
+
+  fetch("/setscore", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...params, score }),
+  })
+    .then((res) => {
+      alert(message);
+    })
+    .catch((err) => {
+      alert(`${message}\nSorry, couldn't save your new score`);
+    });
+};
+
+const tetris = new Tetris(canvas, { onScoreChange, onGameOver });
+tetris.start();
+
+document.addEventListener("keydown", (e) => {
+  tetris.setAction(actions[e.key] || "");
+});
 
 restartBtn.addEventListener("click", () => {
   const response = confirm("Do you really want to restart?");
-  if (response) start();
+  if (response) tetris.start();
 });
 
-start();
+keyboardToggleBtn.addEventListener("click", () => {
+  isKeyboardVisible = !isKeyboardVisible;
+
+  keyboardToggleBtn.classList.toggle("toggled", isKeyboardVisible);
+  keyboard.classList.toggle("hidden", !isKeyboardVisible);
+});
+
+upBtn.addEventListener("touchend", () => tetris.setAction(actions.UP));
+upBtn.addEventListener("click", () => tetris.setAction(actions.UP));
+
+downBtn.addEventListener("touchend", () => tetris.setAction(actions.DOWN));
+downBtn.addEventListener("click", () => tetris.setAction(actions.DOWN));
+
+leftBtn.addEventListener("touchend", () => tetris.setAction(actions.LEFT));
+leftBtn.addEventListener("click", () => tetris.setAction(actions.LEFT));
+
+rightBtn.addEventListener("touchend", () => tetris.setAction(actions.RIGHT));
+rightBtn.addEventListener("click", () => tetris.setAction(actions.RIGHT));
+
+centerBtn.addEventListener("touchend", () => tetris.setAction(actions.ACTION));
+centerBtn.addEventListener("click", () => tetris.setAction(actions.ACTION));
+
+const handleGesture = () => {
+  if (isKeyboardVisible) return;
+
+  const xDiff = Math.abs(touchstartX - touchendX);
+  const yDiff = Math.abs(touchstartY - touchendY);
+
+  if (xDiff === 0 && yDiff === 0) {
+    tetris.setAction(actions.ACTION);
+  } else if (xDiff > yDiff) {
+    if (touchendX < touchstartX) tetris.setAction(actions.LEFT);
+    if (touchendX > touchstartX) tetris.setAction(actions.RIGHT);
+  } else {
+    if (touchendY < touchstartY) tetris.setAction(actions.UP);
+    if (touchendY > touchstartY) tetris.setAction(actions.DOWN);
+  }
+};
+
+keyboard.addEventListener("touchstart", (e) => {
+  touchstartX = e.changedTouches[0].screenX;
+  touchstartY = e.changedTouches[0].screenY;
+});
+
+keyboard.addEventListener("touchend", (e) => {
+  touchendX = e.changedTouches[0].screenX;
+  touchendY = e.changedTouches[0].screenY;
+
+  handleGesture();
+});
+
+canvas.addEventListener("touchstart", (e) => {
+  touchstartX = e.changedTouches[0].screenX;
+  touchstartY = e.changedTouches[0].screenY;
+});
+
+canvas.addEventListener("touchend", (e) => {
+  touchendX = e.changedTouches[0].screenX;
+  touchendY = e.changedTouches[0].screenY;
+
+  handleGesture();
+});
