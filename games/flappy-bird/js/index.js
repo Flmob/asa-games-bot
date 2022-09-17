@@ -3,7 +3,7 @@ const canvas = document.querySelector("canvas");
 const url = new URL(location.href);
 const params = Object.fromEntries(url.searchParams);
 
-const onGameEnd = (score) => {
+const onGameOver = (score) => {
   const message = `You've lost! Your score is ${score}.`;
 
   if (!score) return;
@@ -21,7 +21,7 @@ const onGameEnd = (score) => {
     });
 };
 
-const flappyBird = new FlappyBird(canvas, { onGameEnd });
+const flappyBird = new FlappyBird(canvas, { onGameOver });
 
 document.addEventListener("keypress", (e) => {
   keys[e.code] && flappyBird.onAction();

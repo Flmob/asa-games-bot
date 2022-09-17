@@ -23,7 +23,7 @@ class Game2048 {
   fieldSize;
 
   onScoreChange;
-  onGameEnd;
+  onGameOver;
   onGameWin;
 
   constructor(canvas, events = {}, params = {}) {
@@ -32,12 +32,12 @@ class Game2048 {
 
     const {
       onScoreChange = () => {},
-      onGameEnd = () => {},
+      onGameOver = () => {},
       onGameWin = () => {},
     } = events;
 
     this.onScoreChange = onScoreChange;
-    this.onGameEnd = onGameEnd;
+    this.onGameOver = onGameOver;
     this.onGameWin = onGameWin;
 
     const { fieldSize = 4, outlineStep = 0.4 } = params;
@@ -413,7 +413,7 @@ class Game2048 {
     }
 
     if (this.isGameOver) {
-      this.onGameEnd(this.score);
+      this.onGameOver(this.score);
       this.isGameOver = false;
     }
 

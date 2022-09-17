@@ -23,16 +23,16 @@ class Snake {
   ctx;
 
   onScoreChange;
-  onGameEnd;
+  onGameOver;
 
   constructor(canvas, events) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    const { onScoreChange = () => {}, onGameEnd = () => {} } = events;
+    const { onScoreChange = () => {}, onGameOver = () => {} } = events;
 
     this.onScoreChange = onScoreChange;
-    this.onGameEnd = onGameEnd;
+    this.onGameOver = onGameOver;
   }
 
   setScale = () => {
@@ -262,7 +262,7 @@ class Snake {
     }
 
     if (this.isGameOver) {
-      this.onGameEnd(this.score);
+      this.onGameOver(this.score);
       return;
     }
 

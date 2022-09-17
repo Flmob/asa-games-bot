@@ -24,7 +24,7 @@ const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
 
-const onGameEnd = (score) => {
+const onGameOver = (score) => {
   const message = `You've lost! Your score is ${score}.`;
 
   if (!score) return;
@@ -50,7 +50,7 @@ const onGameWin = (score) => {
 
 const game2048 = new Game2048(canvas, {
   onScoreChange,
-  onGameEnd,
+  onGameOver,
   onGameWin,
 });
 

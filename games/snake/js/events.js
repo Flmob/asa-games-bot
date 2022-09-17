@@ -26,7 +26,7 @@ const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
 
-const onGameEnd = (score) => {
+const onGameOver = (score) => {
   const message = `You've lost! Your score is ${score}.`;
 
   if (!score) return;
@@ -44,7 +44,7 @@ const onGameEnd = (score) => {
     });
 };
 
-const snake = new Snake(canvas, { onScoreChange, onGameEnd });
+const snake = new Snake(canvas, { onScoreChange, onGameOver });
 
 const setCanvasSize = () => {
   setTimeout(() => {

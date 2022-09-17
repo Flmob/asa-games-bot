@@ -14,7 +14,7 @@ class FlappyBird {
 
   onGameReady = () => {};
   onScoreChange = () => {};
-  onGameEnd = () => {};
+  onGameOver = () => {};
 
   hasAction = false; // to detect screen was touched or clicked
 
@@ -61,12 +61,12 @@ class FlappyBird {
     const {
       onGameReady = () => {},
       onScoreChange = () => {},
-      onGameEnd = () => {},
+      onGameOver = () => {},
     } = events;
 
     this.onGameReady = onGameReady;
     this.onScoreChange = onScoreChange;
-    this.onGameEnd = onGameEnd;
+    this.onGameOver = onGameOver;
 
     this.initData();
   }
@@ -382,7 +382,7 @@ class FlappyBird {
       ) {
         this.sounds.hit.play();
         this.gameState = gameStates.gameOver;
-        this.onGameEnd(this.gameScore);
+        this.onGameOver(this.gameScore);
       }
 
       if (x + pipeHeadWidth < this.birdX) {
