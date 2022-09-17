@@ -62,19 +62,19 @@ keyboardToggleBtn.addEventListener("click", () => {
   keyboard.classList.toggle("hidden", !isKeyboardVisible);
 });
 
-upBtn.addEventListener("touchend", () => tetris.setAction(actions.UP));
+upBtn.addEventListener("touch", () => tetris.setAction(actions.UP));
 upBtn.addEventListener("click", () => tetris.setAction(actions.UP));
 
-downBtn.addEventListener("touchend", () => tetris.setAction(actions.DOWN));
+downBtn.addEventListener("touch", () => tetris.setAction(actions.DOWN));
 downBtn.addEventListener("click", () => tetris.setAction(actions.DOWN));
 
-leftBtn.addEventListener("touchend", () => tetris.setAction(actions.LEFT));
+leftBtn.addEventListener("touch", () => tetris.setAction(actions.LEFT));
 leftBtn.addEventListener("click", () => tetris.setAction(actions.LEFT));
 
-rightBtn.addEventListener("touchend", () => tetris.setAction(actions.RIGHT));
+rightBtn.addEventListener("touch", () => tetris.setAction(actions.RIGHT));
 rightBtn.addEventListener("click", () => tetris.setAction(actions.RIGHT));
 
-centerBtn.addEventListener("touchend", () => tetris.setAction(actions.ACTION));
+centerBtn.addEventListener("touch", () => tetris.setAction(actions.ACTION));
 centerBtn.addEventListener("click", () => tetris.setAction(actions.ACTION));
 
 const handleGesture = () => {
