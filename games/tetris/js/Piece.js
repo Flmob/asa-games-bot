@@ -5,22 +5,40 @@ class Piece {
       color,
       ctx,
       board,
+      squareSize,
+      marginX,
+      marginY,
       onLock = () => {},
       onGameOver = () => {},
+      x = 0,
+      y = 0,
     } = options;
 
     this.onLock = onLock;
     this.onGameOver = onGameOver;
 
+    this.squareSize = squareSize;
+    this.marginX = marginX;
+    this.marginY = marginY;
     this.ctx = ctx;
     this.board = board;
     this.tetromino = tetromino;
     this.tetrominoN = 0;
     this.activeTetromino = this.tetromino[this.tetrominoN];
     this.color = color;
-    this.x = 3;
-    this.y = -2;
+    this.x = x;
+    this.y = y;
     this.length = this.activeTetromino.length;
+  }
+
+  setNewOptions(options = {}) {
+    const { squareSize, marginX, marginY, x, y } = options;
+
+    if (squareSize) this.squareSize = squareSize;
+    if (typeof marginX === "number") this.marginX = marginX;
+    if (typeof marginY === "number") this.marginY = marginY;
+    if (typeof x === "number") this.x = x;
+    if (typeof y === "number") this.y = y;
   }
 
   collision(x, y, piece) {
@@ -54,7 +72,15 @@ class Piece {
     for (let r = 0; r < this.length; r++) {
       for (let c = 0; c < this.length; c++) {
         if (this.activeTetromino[r][c]) {
-          drawSquare(this.ctx, c + this.x, r + this.y, color);
+          drawSquare({
+            ctx: this.ctx,
+            x: c + this.x,
+            y: r + this.y,
+            color,
+            squareSize: this.squareSize,
+            marginX: this.marginX,
+            marginY: this.marginY,
+          });
         }
       }
     }

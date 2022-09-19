@@ -1,5 +1,6 @@
 const canvas = document.getElementById("tetris");
 
+const canvasWrapper = document.querySelector(".canvas-wrapper");
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
@@ -44,6 +45,17 @@ const onGameOver = (score) => {
 };
 
 const tetris = new Tetris(canvas, { onScoreChange, onGameOver });
+
+const setCanvasSize = () => {
+  setTimeout(() => {
+    canvas.height = canvasWrapper.clientHeight;
+    canvas.width = canvasWrapper.clientHeight * (450 / 400);
+
+    tetris.setScale();
+  }, 50);
+};
+
+setCanvasSize();
 tetris.start();
 
 document.addEventListener("keydown", (e) => {
@@ -117,3 +129,5 @@ canvas.addEventListener("touchend", (e) => {
 
   handleGesture();
 });
+
+window.addEventListener("resize", setCanvasSize, true);

@@ -3,8 +3,13 @@ class Tetris {
   isPaused = false;
   isGameOver = false;
   currentPiece;
+  nextPiece;
   score = 0;
   action = "";
+  squareSize = 20;
+  boardMargin = 0;
+  nextBigPieceBoardMargin = 0;
+  nextSmallPieceBoardMargin = 0;
 
   animationFrameRequest;
   previousTimestamp = 0;
@@ -24,6 +29,44 @@ class Tetris {
     this.onScoreChange = onScoreChange;
     this.onGameOver = onGameOver;
   }
+
+  setScale = () => {
+    this.squareSize = this.canvas.height / rowsCount;
+    const boardWidth = this.squareSize * columnsCount;
+    this.boardMargin = (this.canvas.width - boardWidth) / 2;
+
+    const bigPieceBoardWidth = this.squareSize * 4; // 4 - max tetromino length
+    const smallPieceBoardWidth = this.squareSize * 3; // 3 - min tetromino length
+
+    this.nextBigPieceBoardMargin =
+      this.boardMargin +
+      boardWidth +
+      (this.boardMargin - bigPieceBoardWidth) / 2;
+    this.nextSmallPieceBoardMargin =
+      this.boardMargin +
+      boardWidth +
+      (this.boardMargin - smallPieceBoardWidth) / 2;
+
+    this.currentPiece.setNewOptions({
+      squareSize: this.squareSize,
+      marginX: this.boardMargin,
+      marginY: 0,
+    });
+
+    this.nextPiece.setNewOptions({
+      squareSize: this.squareSize,
+      marginX:
+        this.nextPiece.length === 4
+          ? this.nextBigPieceBoardMargin
+          : this.nextSmallPieceBoardMargin,
+      marginY:
+        this.nextPiece.length === 4 ? this.squareSize : this.squareSize * 2.5,
+    });
+
+    this.drawBoard();
+    this.currentPiece.draw();
+    this.drawNextPiece();
+  };
 
   setAction(action = "") {
     if (this.isPaused && action !== ACTION) return;
@@ -66,8 +109,38 @@ class Tetris {
 
   drawBoard() {
     this.board.forEach((row, y) =>
-      row.forEach((color, x) => drawSquare(this.ctx, x, y, color))
+      row.forEach((color, x) =>
+        drawSquare({
+          ctx: this.ctx,
+          x,
+          y,
+          color,
+          squareSize: this.squareSize,
+          marginX: this.boardMargin,
+        })
+      )
     );
+  }
+
+  drawNextPiece() {
+    const nextPieceBoardSize = this.squareSize * 4;
+
+    this.ctx.fillStyle = vacantColor;
+    this.ctx.fillRect(
+      this.nextBigPieceBoardMargin,
+      this.squareSize,
+      nextPieceBoardSize,
+      nextPieceBoardSize
+    );
+    this.ctx.strokeStyle = "black";
+    this.ctx.strokeRect(
+      this.nextBigPieceBoardMargin,
+      this.squareSize,
+      nextPieceBoardSize,
+      nextPieceBoardSize
+    );
+
+    this.nextPiece.draw();
   }
 
   removeFullRow() {
@@ -93,19 +166,45 @@ class Tetris {
     this.drawBoard();
   }
 
-  getRandomPiece() {
+  getRandomPiece(isNextPiece) {
     const newPiece = pieces[getRandomInt(0, pieces.length)];
+
+    const marginX = isNextPiece
+      ? newPiece[0][0].length === 4
+        ? this.nextBigPieceBoardMargin
+        : this.nextSmallPieceBoardMargin
+      : this.boardMargin;
+
+    const marginY = isNextPiece
+      ? newPiece[0][0].length === 4
+        ? this.squareSize
+        : this.squareSize * 2.5
+      : 0;
+
     return new Piece({
       tetromino: newPiece[0],
       color: newPiece[1],
       ctx: this.ctx,
       board: this.board,
+      squareSize: this.squareSize,
+      marginX,
+      marginY,
+      x: isNextPiece ? 0 : 3,
+      y: isNextPiece ? 0 : -2,
       onLock: () => {
         if (this.isGameOver) return;
         cancelAnimationFrame(this.animationFrameRequest);
         this.removeFullRow();
-        this.currentPiece = this.getRandomPiece();
+        this.currentPiece = this.nextPiece;
+        this.nextPiece = this.getRandomPiece(true);
+        this.currentPiece.setNewOptions({
+          marginX: this.boardMargin,
+          marginY: 0,
+          x: 3,
+          y: -2,
+        });
         this.currentPiece.draw();
+        this.drawNextPiece();
         this.animate();
       },
       onGameOver: () => {
@@ -135,6 +234,8 @@ class Tetris {
     this.initBoard();
     this.drawBoard();
 
+    this.nextPiece = this.getRandomPiece(true);
+    this.drawNextPiece();
     this.currentPiece = this.getRandomPiece();
     this.currentPiece.draw();
 
