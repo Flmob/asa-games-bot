@@ -1,13 +1,3 @@
-/** 
-TODO NEXT: 
-handle assets loading
-figure out what is wrong with numbers scaling
-end screen
-add delay for 'get ready' disappearing animation
-configure params for proper jumping (height, speed and angle)
-pipe collision logic
-**/
-
 class FlappyBird {
   canvas;
   ctx;

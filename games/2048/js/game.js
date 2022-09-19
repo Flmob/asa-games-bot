@@ -1,7 +1,3 @@
-// TODO:
-//  - create tile class
-//  - optimize isTileWithSameNear function
-
 class Game2048 {
   field;
   tileSize;
