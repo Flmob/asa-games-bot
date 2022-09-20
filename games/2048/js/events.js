@@ -10,6 +10,11 @@ const downBtn = document.querySelector(".down");
 const leftBtn = document.querySelector(".left");
 const rightBtn = document.querySelector(".right");
 
+const modal = document.querySelector(".modal-backdrop");
+const modalBody = document.querySelector(".modal-body");
+const modalCancel = document.querySelector(".modal-action.cancel");
+const modalSubmit = document.querySelector(".modal-action.submit");
+
 const url = new URL(location.href);
 const params = Object.fromEntries(url.searchParams);
 
@@ -20,12 +25,18 @@ let touchendY = 0;
 
 let isKeyboardVisible = false;
 
+modalCancel.onclick = () => {
+  modal.classList.add("closed");
+};
+
 const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
 
 const onGameOver = (score) => {
   const message = `You've lost! Your score is ${score}.`;
+  const errorMessageEnding = "\nSorry, couldn't save your new score.";
+  let resultMessage = "";
 
   if (!score) return;
 
@@ -35,17 +46,30 @@ const onGameOver = (score) => {
     body: JSON.stringify({ ...params, score }),
   })
     .then((res) => {
-      alert(message);
+      resultMessage = message;
     })
     .catch((err) => {
-      alert(`${message}\nSorry, couldn't save your new score`);
+      resultMessage = message + errorMessageEnding;
+    })
+    .finally(() => {
+      modalBody.innerHTML = resultMessage;
+      modalCancel.classList.add("hidden");
+      modalSubmit.onclick = () => {
+        modal.classList.add("closed");
+      };
+      modal.classList.remove("closed");
     });
 };
 
 const onGameWin = (score) => {
   const message = `You've won! Your score is ${score}.`;
 
-  alert(message);
+  modalBody.innerHTML = message;
+  modalCancel.classList.add("hidden");
+  modalSubmit.onclick = () => {
+    modal.classList.add("closed");
+  };
+  modal.classList.remove("closed");
 };
 
 const game2048 = new Game2048(canvas, {
@@ -61,8 +85,15 @@ document.addEventListener("keyup", (e) => {
 });
 
 restartBtn.addEventListener("click", () => {
-  const response = confirm("Do you really want to restart?");
-  if (response) game2048.start();
+  const message = "Do you really want to restart?";
+
+  modalBody.innerHTML = message;
+  modalCancel.classList.remove("hidden");
+  modalSubmit.onclick = () => {
+    modal.classList.add("closed");
+    game2048.start();
+  };
+  modal.classList.remove("closed");
 });
 
 keyboardToggleBtn.addEventListener("click", () => {

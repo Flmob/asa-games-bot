@@ -12,6 +12,11 @@ const leftBtn = document.querySelector(".left");
 const rightBtn = document.querySelector(".right");
 const centerBtn = document.querySelector(".center");
 
+const modal = document.querySelector(".modal-backdrop");
+const modalBody = document.querySelector(".modal-body");
+const modalCancel = document.querySelector(".modal-action.cancel");
+const modalSubmit = document.querySelector(".modal-action.submit");
+
 const url = new URL(location.href);
 const params = Object.fromEntries(url.searchParams);
 
@@ -22,12 +27,18 @@ let touchendY = 0;
 
 let isKeyboardVisible = false;
 
+modalCancel.onclick = () => {
+  modal.classList.add("closed");
+};
+
 const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
 
 const onGameOver = (score) => {
   const message = `You've lost! Your score is ${score}.`;
+  const errorMessageEnding = "\nSorry, couldn't save your new score.";
+  let resultMessage = "";
 
   if (!score) return;
 
@@ -37,10 +48,18 @@ const onGameOver = (score) => {
     body: JSON.stringify({ ...params, score }),
   })
     .then((res) => {
-      alert(message);
+      resultMessage = message;
     })
     .catch((err) => {
-      alert(`${message}\nSorry, couldn't save your new score`);
+      resultMessage = message + errorMessageEnding;
+    })
+    .finally(() => {
+      modalBody.innerHTML = resultMessage;
+      modalCancel.classList.add("hidden");
+      modalSubmit.onclick = () => {
+        modal.classList.add("closed");
+      };
+      modal.classList.remove("closed");
     });
 };
 
@@ -63,8 +82,15 @@ document.addEventListener("keyup", (e) => {
 });
 
 restartBtn.addEventListener("click", () => {
-  const response = confirm("Do you really want to restart?");
-  if (response) snake.start();
+  const message = "Do you really want to restart?";
+
+  modalBody.innerHTML = message;
+  modalCancel.classList.remove("hidden");
+  modalSubmit.onclick = () => {
+    modal.classList.add("closed");
+    snake.start();
+  };
+  modal.classList.remove("closed");
 });
 
 keyboardToggleBtn.addEventListener("click", () => {
