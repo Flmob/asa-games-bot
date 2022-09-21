@@ -10,6 +10,9 @@ class Tetris {
   boardMargin = 0;
   nextBigPieceBoardMargin = 0;
   nextSmallPieceBoardMargin = 0;
+  combo = 0;
+  clearedRows = 0;
+  speed = defaultSpeed;
 
   animationFrameRequest;
   previousTimestamp = 0;
@@ -144,6 +147,8 @@ class Tetris {
   }
 
   removeFullRow() {
+    let clearedRows = 0;
+
     for (let r = 0; r < rowsCount; r++) {
       let isRowFull = true;
 
@@ -158,12 +163,31 @@ class Tetris {
         this.board.splice(r, 1);
         this.board.unshift(new Array(columnsCount).fill(vacantColor));
 
-        this.score += 10;
-        this.onScoreChange(this.score);
+        clearedRows++;
       }
     }
 
-    this.drawBoard();
+    if (clearedRows) {
+      this.score += 10 * clearedRows;
+      this.clearedRows += clearedRows;
+      this.combo += clearedRows;
+
+      const level = Math.floor(this.clearedRows / 10);
+      const speedIncrease = level * 10;
+      this.speed = defaultSpeed - speedIncrease;
+      if (this.speed < minSpeed) this.speed = minSpeed;
+
+      this.onScoreChange(this.score);
+      this.drawBoard();
+    } else {
+      if (this.combo > 2) {
+        this.score += 50 * this.combo;
+      }
+
+      this.combo = 0;
+
+      this.onScoreChange(this.score);
+    }
   }
 
   getRandomPiece(isNextPiece) {
@@ -219,7 +243,7 @@ class Tetris {
 
     const progress = timestamp - this.previousTimestamp;
 
-    if (progress > 300 && !this.isPaused && !this.isGameOver) {
+    if (progress > this.speed && !this.isPaused && !this.isGameOver) {
       this.currentPiece.moveDown();
       this.previousTimestamp = 0;
     }
@@ -240,6 +264,9 @@ class Tetris {
     this.currentPiece.draw();
 
     this.score = 0;
+    this.combo = 0;
+    this.clearedRows = 0;
+    this.speed = defaultSpeed;
     this.onScoreChange(this.score);
 
     this.animate();

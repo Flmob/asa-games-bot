@@ -27,6 +27,8 @@ const pieces = [
   [J, "orange"],
 ];
 
-rowsCount = 20;
-columnsCount = 10;
-vacantColor = "lightgrey";
+const rowsCount = 20;
+const columnsCount = 10;
+const defaultSpeed = 400;
+const minSpeed = 50;
+const vacantColor = "lightgrey";
