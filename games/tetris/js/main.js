@@ -1,7 +1,6 @@
 const canvas = document.getElementById("tetris");
 
 const canvasWrapper = document.querySelector(".canvas-wrapper");
-const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
 const keyboard = document.querySelector(".keyboard");
@@ -29,10 +28,6 @@ let isKeyboardVisible = false;
 
 modalCancel.onclick = () => {
   modal.classList.add("closed");
-};
-
-const onScoreChange = (score) => {
-  scoreSpan.innerHTML = score;
 };
 
 const onGameOver = (score) => {
@@ -63,7 +58,7 @@ const onGameOver = (score) => {
     });
 };
 
-const tetris = new Tetris(canvas, { onScoreChange, onGameOver });
+const tetris = new Tetris(canvas, { onGameOver });
 
 const setCanvasSize = () => {
   setTimeout(() => {

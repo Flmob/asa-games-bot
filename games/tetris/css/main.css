@@ -61,10 +61,6 @@ canvas {
   user-select: none;
 }
 
-.score-wrapper {
-  pointer-events: none;
-}
-
 .restart,
 .keyboard-toggle {
   padding: 4px;
@@ -129,6 +125,10 @@ canvas {
   .visible-zone {
     height: calc(100% - 50px);
     width: 100%;
+  }
+
+  .info-board {
+    justify-content: center;
   }
 
   .keyboard,

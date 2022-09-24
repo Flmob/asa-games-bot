@@ -5,12 +5,13 @@ class Tetris {
   currentPiece;
   nextPiece;
   score = 0;
+  combo = 0;
+  level = 0;
   action = "";
   squareSize = 20;
   boardMargin = 0;
   nextBigPieceBoardMargin = 0;
   nextSmallPieceBoardMargin = 0;
-  combo = 0;
   clearedRows = 0;
   speed = defaultSpeed;
 
@@ -66,9 +67,14 @@ class Tetris {
         this.nextPiece.length === 4 ? this.squareSize : this.squareSize * 2.5,
     });
 
+    this.clearCanvas();
     this.drawBoard();
     this.currentPiece.draw();
     this.drawNextPiece();
+
+    this.writeScore(true);
+    this.writeCombo(true);
+    this.writeLevel(true);
   };
 
   setAction(action = "") {
@@ -125,6 +131,11 @@ class Tetris {
     );
   }
 
+  clearCanvas() {
+    this.ctx.fillStyle = vacantColor;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
   drawNextPiece() {
     const nextPieceBoardSize = this.squareSize * 4;
 
@@ -144,6 +155,54 @@ class Tetris {
     );
 
     this.nextPiece.draw();
+  }
+
+  writeInfo({ label, value, line, updateLabel }) {
+    this.ctx.textBaseline = "top";
+    this.ctx.font = `${this.squareSize}px serif`;
+
+    if (updateLabel) {
+      this.ctx.fillStyle = vacantColor;
+      this.ctx.fillRect(
+        this.squareSize,
+        this.squareSize * line,
+        this.boardMargin - this.squareSize - 2,
+        this.squareSize
+      );
+      this.ctx.fillStyle = "black";
+      this.ctx.fillText(
+        label,
+        this.squareSize,
+        this.squareSize * line,
+        this.boardMargin - this.squareSize
+      );
+    }
+    this.ctx.fillStyle = vacantColor;
+    this.ctx.fillRect(
+      this.squareSize,
+      this.squareSize * (line + 1),
+      this.boardMargin - this.squareSize - 2,
+      this.squareSize
+    );
+    this.ctx.fillStyle = "black";
+    this.ctx.fillText(
+      value,
+      this.squareSize,
+      this.squareSize * (line + 1),
+      this.boardMargin - this.squareSize
+    );
+  }
+
+  writeScore(updateLabel = false) {
+    this.writeInfo({ label: "SCORE", value: this.score, line: 1, updateLabel });
+  }
+
+  writeCombo(updateLabel = false) {
+    this.writeInfo({ label: "COMBO", value: this.combo, line: 3, updateLabel });
+  }
+
+  writeLevel(updateLabel = false) {
+    this.writeInfo({ label: "LEVEL", value: this.level, line: 5, updateLabel });
   }
 
   removeFullRow() {
@@ -171,13 +230,15 @@ class Tetris {
       this.score += 10 * clearedRows;
       this.clearedRows += clearedRows;
       this.combo += clearedRows;
+      this.level = Math.floor(this.clearedRows / 10);
 
-      const level = Math.floor(this.clearedRows / 10);
-      const speedIncrease = level * 10;
+      const speedIncrease = this.level * 10;
       this.speed = defaultSpeed - speedIncrease;
       if (this.speed < minSpeed) this.speed = minSpeed;
 
-      this.onScoreChange(this.score);
+      this.writeScore();
+      this.writeCombo();
+      this.writeLevel();
       this.drawBoard();
     } else {
       if (this.combo > 2) {
@@ -186,7 +247,8 @@ class Tetris {
 
       this.combo = 0;
 
-      this.onScoreChange(this.score);
+      this.writeScore();
+      this.writeCombo();
     }
   }
 
@@ -255,6 +317,12 @@ class Tetris {
     this.isGameOver = false;
     this.isPaused = false;
 
+    this.score = 0;
+    this.combo = 0;
+    this.level = 0;
+    this.clearedRows = 0;
+    this.speed = defaultSpeed;
+
     this.initBoard();
     this.drawBoard();
 
@@ -263,11 +331,9 @@ class Tetris {
     this.currentPiece = this.getRandomPiece();
     this.currentPiece.draw();
 
-    this.score = 0;
-    this.combo = 0;
-    this.clearedRows = 0;
-    this.speed = defaultSpeed;
-    this.onScoreChange(this.score);
+    this.writeScore();
+    this.writeCombo();
+    this.writeLevel();
 
     this.animate();
   }
