@@ -64,13 +64,15 @@ class Tetris {
           ? this.nextBigPieceBoardMargin
           : this.nextSmallPieceBoardMargin,
       marginY:
-        this.nextPiece.length === 4 ? this.squareSize : this.squareSize * 2.5,
+        this.nextPiece.length === 4
+          ? this.squareSize * 2
+          : this.squareSize * 3.5,
     });
 
     this.clearCanvas();
     this.drawBoard();
     this.currentPiece.draw();
-    this.drawNextPiece();
+    this.drawNextPiece(true);
 
     this.writeScore(true);
     this.writeCombo(true);
@@ -91,13 +93,11 @@ class Tetris {
         break;
       }
       case LEFT: {
-        this.currentPiece.moveLeft();
-        this.previousTimestamp = 0;
+        this.currentPiece.moveLeft() && (this.previousTimestamp = 0);
         break;
       }
       case RIGHT: {
-        this.currentPiece.moveRight();
-        this.previousTimestamp = 0;
+        this.currentPiece.moveRight() && (this.previousTimestamp = 0);
         break;
       }
       case ACTION: {
@@ -136,20 +136,34 @@ class Tetris {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  drawNextPiece() {
+  drawNextPiece(withLabel) {
+    const nextPieceBoardY = this.squareSize * 2;
     const nextPieceBoardSize = this.squareSize * 4;
+
+    if (withLabel) {
+      this.ctx.textBaseline = "top";
+      this.ctx.font = `${this.squareSize}px serif`;
+
+      this.ctx.fillStyle = "black";
+      this.ctx.fillText(
+        "NEXT",
+        this.nextBigPieceBoardMargin,
+        this.squareSize,
+        this.boardMargin - this.squareSize
+      );
+    }
 
     this.ctx.fillStyle = vacantColor;
     this.ctx.fillRect(
       this.nextBigPieceBoardMargin,
-      this.squareSize,
+      nextPieceBoardY,
       nextPieceBoardSize,
       nextPieceBoardSize
     );
     this.ctx.strokeStyle = "black";
     this.ctx.strokeRect(
       this.nextBigPieceBoardMargin,
-      this.squareSize,
+      nextPieceBoardY,
       nextPieceBoardSize,
       nextPieceBoardSize
     );
@@ -263,8 +277,8 @@ class Tetris {
 
     const marginY = isNextPiece
       ? newPiece[0][0].length === 4
-        ? this.squareSize
-        : this.squareSize * 2.5
+        ? this.squareSize * 2
+        : this.squareSize * 3.5
       : 0;
 
     return new Piece({

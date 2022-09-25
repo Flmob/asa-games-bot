@@ -109,7 +109,9 @@ class Piece {
       this.unDraw();
       this.x--;
       this.draw();
+      return true;
     }
+    return false;
   }
 
   moveRight() {
@@ -117,7 +119,9 @@ class Piece {
       this.unDraw();
       this.x++;
       this.draw();
+      return true;
     }
+    return false;
   }
 
   rotate() {
