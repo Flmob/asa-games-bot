@@ -1,7 +1,6 @@
 class Game2048 {
   field;
   tileSize;
-  tilePadding = 4;
   outlineStep;
   score = 0;
   direction = ""; //up, down, left, right
@@ -103,12 +102,11 @@ class Game2048 {
   }
 
   addRandomTile(emptyTiles) {
+    if (!emptyTiles.length) return;
+
     const value = Math.random() > 0.1 ? 2 : 4;
-
     const randomIndex = getRandomInt(0, emptyTiles.length - 1);
-
     const { x, y } = emptyTiles[randomIndex];
-
     this.field[y][x] = { value, x, y, outline: { ...defaultOutline } };
   }
 
@@ -118,10 +116,10 @@ class Game2048 {
 
     roundRect(
       this.ctx,
-      x + this.tilePadding - outline,
-      y + this.tilePadding - outline,
-      this.tileSize - this.tilePadding * 2 + outline * 2,
-      this.tileSize - this.tilePadding * 2 + outline * 2,
+      x + tilePadding - outline,
+      y + tilePadding - outline,
+      this.tileSize - tilePadding * 2 + outline * 2,
+      this.tileSize - tilePadding * 2 + outline * 2,
       true
     );
 
@@ -360,7 +358,7 @@ class Game2048 {
 
         this.addRandomTile(emptyTiles);
 
-        if (!emptyTiles.length && !this.isTileWithSameNear()) {
+        if (emptyTiles.length === 1 && !this.isTileWithSameNear()) {
           this.isGameOver = true;
         }
       }
