@@ -14,6 +14,7 @@ const centerBtn = document.querySelector(".center");
 
 const modal = document.querySelector(".modal-backdrop");
 const modalBody = document.querySelector(".modal-body");
+const modalRestart = document.querySelector(".modal-action.restart");
 const modalCancel = document.querySelector(".modal-action.cancel");
 const modalSubmit = document.querySelector(".modal-action.submit");
 
@@ -55,11 +56,14 @@ const onGameOver = (score) => {
     })
     .finally(() => {
       modalBody.innerHTML = resultMessage;
+
+      modalRestart.classList.remove("hidden");
       modalCancel.classList.add("hidden");
+      modal.classList.remove("closed");
+
       modalSubmit.onclick = () => {
         modal.classList.add("closed");
       };
-      modal.classList.remove("closed");
     });
 };
 
@@ -81,16 +85,23 @@ document.addEventListener("keyup", (e) => {
   snake.setDirection(actions[e.key] || "");
 });
 
+modalRestart.addEventListener("click", () => {
+  modal.classList.add("closed");
+  snake.start();
+});
+
 restartBtn.addEventListener("click", () => {
   const message = "Do you really want to restart?";
-
   modalBody.innerHTML = message;
+
+  modalRestart.classList.add("hidden");
   modalCancel.classList.remove("hidden");
+  modal.classList.remove("closed");
+
   modalSubmit.onclick = () => {
     modal.classList.add("closed");
     snake.start();
   };
-  modal.classList.remove("closed");
 });
 
 keyboardToggleBtn.addEventListener("click", () => {

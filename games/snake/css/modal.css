@@ -39,12 +39,9 @@
 .modal-action {
   padding: 3px;
   cursor: pointer;
-}
-
-.modal-action.cancel.hidden {
-  display: none;
-}
-
-.modal-action.submit {
   margin-left: 4px;
+}
+
+.modal-action.hidden {
+  display: none;
 }
