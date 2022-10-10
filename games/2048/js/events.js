@@ -35,11 +35,24 @@ const onScoreChange = (score) => {
 };
 
 const onGameOver = (score) => {
-  const message = `You've lost! Your score is ${score}.`;
-  const errorMessageEnding = "\nSorry, couldn't save your new score.";
-  let resultMessage = "";
+  if (!score && score !== 0) return;
 
-  if (!score) return;
+  const message = `You've lost! Your score is ${score}.`;
+  const scoreComment = score <= 100 ? " Are you serious?" : "";
+  const scoreSending = "\nSaving your score. Please, wait...";
+  const scoreSaved = "\nYour score was saved.";
+  const errorMessageEnding = "\nSorry, couldn't save your new score.";
+
+  let resultMessage = `${message}${scoreComment}${scoreSending}`;
+  modalBody.innerHTML = resultMessage;
+
+  modalRestart.classList.remove("hidden");
+  modalCancel.classList.add("hidden");
+  modal.classList.remove("closed");
+
+  modalSubmit.onclick = () => {
+    modal.classList.add("closed");
+  };
 
   fetch("/setscore", {
     method: "POST",
@@ -47,21 +60,13 @@ const onGameOver = (score) => {
     body: JSON.stringify({ ...params, score }),
   })
     .then((res) => {
-      resultMessage = message;
+      resultMessage = `${message}${scoreComment}${scoreSaved}`;
     })
     .catch((err) => {
-      resultMessage = message + errorMessageEnding;
+      resultMessage = `${message}${scoreComment}${errorMessageEnding}`;
     })
     .finally(() => {
       modalBody.innerHTML = resultMessage;
-
-      modalRestart.classList.remove("hidden");
-      modalCancel.classList.add("hidden");
-      modal.classList.remove("closed");
-
-      modalSubmit.onclick = () => {
-        modal.classList.add("closed");
-      };
     });
 };
 
