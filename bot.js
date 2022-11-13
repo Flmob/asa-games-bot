@@ -31,6 +31,7 @@ const games = {
 const type = "game";
 const reply_markup = Markup.inlineKeyboard([
   Markup.button.game("🎮 Play now!"),
+  Markup.button.url("📰 Bot news", "https://t.me/asa_games_bot_news"),
 ]);
 const gamesQueryArray = Object.values(games).map(({ game_short_name }, id) => ({
   type,
