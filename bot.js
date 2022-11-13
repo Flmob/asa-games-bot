@@ -37,7 +37,7 @@ const gamesQueryArray = Object.values(games).map(({ game_short_name }, id) => ({
   type,
   id,
   game_short_name,
-  reply_markup,
+  ...reply_markup,
 }));
 
 bot.command("start", (ctx) => {
