@@ -14,6 +14,10 @@ const actions = {
   ArrowLeft: LEFT,
 };
 
+
+const defaultTileColor = 'rgb(238,204,97)';
+const textColor = 'rgb(119,110,101)';
+
 const tileColors = {
   0: "rgb(205,192,179)",
   2: "rgb(237,228,218)",
@@ -25,8 +29,8 @@ const tileColors = {
   128: "rgb(237,207,113)",
   256: "rgb(238,204,97)",
   512: "rgb(238,204,97)",
-  1024: "",
-  2048: "",
+  1024: "rgb(238,204,97)",
+  2048: "rgb(238,204,97)",
 };
 
 const defaultOutline = {

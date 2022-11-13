@@ -111,8 +111,8 @@ class Game2048 {
   }
 
   drawTile(tile = 0, x, y, outline = 0) {
-    this.ctx.strokeStyle = tileColors[tile] || "rgb(238,204,97)";
-    this.ctx.fillStyle = tileColors[tile] || "rgb(238,204,97)";
+    this.ctx.strokeStyle = tileColors[tile] || defaultTileColor;
+    this.ctx.fillStyle = tileColors[tile] || defaultTileColor;
 
     roundRect(
       this.ctx,
@@ -128,7 +128,7 @@ class Game2048 {
       const textY = y + this.tileSize / 2 + 10;
       this.ctx.font = `${this.tileSize / 6}pt Arial`;
       this.ctx.textAlign = "center";
-      this.ctx.fillStyle = "rgb(119,110,101)";
+      this.ctx.fillStyle = textColor;
       this.ctx.fillText(tile, textX, textY);
     }
   }
@@ -434,9 +434,8 @@ class Game2048 {
       .fill(0)
       .map(() => new Array(this.fieldSize).fill(undefined));
 
-    const emptyTiles = this.getEmptyTiles();
-    this.addRandomTile(emptyTiles);
-    this.addRandomTile(emptyTiles);
+    this.addRandomTile(this.getEmptyTiles());
+    this.addRandomTile(this.getEmptyTiles());
     this.draw();
 
     cancelAnimationFrame(this.animationFrameRequest);
