@@ -54,39 +54,13 @@ bot.on("inline_query", (ctx) => {
   return ctx.answerInlineQuery(gamesQueryArray);
 });
 
-bot.command("2048", (ctx) => {
-  console.log("GAME 2048");
-  console.log({ ...ctx.from, date: new Date() });
+Object.values(games).forEach(({ game_short_name }) => {
+  bot.command(game_short_name, (ctx) => {
+    console.log(`game ${game_short_name}`);
+    console.log({ ...ctx.from, date: new Date() });
 
-  return ctx.replyWithGame(games.asa2048.game_short_name, reply_markup);
-});
-
-bot.command("t-rex", (ctx) => {
-  console.log("GAME t-rex");
-  console.log({ ...ctx.from, date: new Date() });
-
-  return ctx.replyWithGame(games.tRex.game_short_name, reply_markup);
-});
-
-bot.command("snake", (ctx) => {
-  console.log("GAME snake");
-  console.log({ ...ctx.from, date: new Date() });
-
-  return ctx.replyWithGame(games.snake.game_short_name, reply_markup);
-});
-
-bot.command("flappy_bird", (ctx) => {
-  console.log("GAME flappy_bird");
-  console.log({ ...ctx.from, date: new Date() });
-
-  return ctx.replyWithGame(games.flappy_bird.game_short_name, reply_markup);
-});
-
-bot.command("tetris", (ctx) => {
-  console.log("GAME tetris");
-  console.log({ ...ctx.from, date: new Date() });
-
-  return ctx.replyWithGame(games.tetris.game_short_name, reply_markup);
+    return ctx.replyWithGame(game_short_name, reply_markup);
+  });
 });
 
 bot.gameQuery((ctx) => {
