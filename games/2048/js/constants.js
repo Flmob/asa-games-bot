@@ -38,5 +38,6 @@ const defaultOutline = {
   width: 0,
   isUp: true,
 };
+const outlineStep = 0.4;
 
 const tilePadding = 4;

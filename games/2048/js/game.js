@@ -1,7 +1,6 @@
 class Game2048 {
   field;
   tileSize;
-  outlineStep;
   score = 0;
   direction = ""; //up, down, left, right
   isFieldUpdated = false;
@@ -35,10 +34,9 @@ class Game2048 {
     this.onGameOver = onGameOver;
     this.onGameWin = onGameWin;
 
-    const { fieldSize = 4, outlineStep = 0.4 } = params;
+    const { fieldSize = 4 } = params;
 
     this.fieldSize = fieldSize;
-    this.outlineStep = outlineStep;
   }
 
   setDirection(action) {
@@ -367,7 +365,7 @@ class Game2048 {
     this.field.forEach((line, y) => {
       line.forEach((tile, x) => {
         this.field[y][x] = tile
-          ? updateTileOutline(tile, this.outlineStep)
+          ? updateTileOutline(tile)
           : tile;
         if (tile && tile.outline.isPlaying) {
           this.isFieldUpdated = true;

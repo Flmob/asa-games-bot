@@ -49,7 +49,7 @@ function roundRect(ctx, x, y, width, height, fill, radius = 5, stroke = true) {
   }
 }
 
-const updateTileOutline = (tile, outlineStep) => {
+const updateTileOutline = (tile) => {
   if (!tile.outline.isPlaying) return tile;
 
   if (tile.outline.isUp) {
