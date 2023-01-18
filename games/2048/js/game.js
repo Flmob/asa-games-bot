@@ -306,7 +306,7 @@ class Game2048 {
       .map((_, y) =>
         new Array(this.fieldSize)
           .fill(undefined)
-          .map((_, x) => new Tile({ x, y, ctx: this.ctx }))
+          .map((_, x) => new Tile({ x, y, ctx: this.ctx, size: this.tileSize }))
       );
 
     this.addRandomTile(this.getEmptyTiles());
