@@ -48,7 +48,7 @@ class Game2048 {
 
     this.field.forEach((line, y) => {
       line.forEach((tile, x) => {
-        if (!tile) emptyTiles.push({ x, y });
+        if (!tile.value) emptyTiles.push({ x, y });
       });
     });
 
@@ -64,7 +64,7 @@ class Game2048 {
 
         //check up
         if (y > 0) {
-          if (this.field[y - 1][x]?.value === currentTile?.value) {
+          if (this.field[y - 1][x].value === currentTile.value) {
             result = true;
             break;
           }
@@ -72,7 +72,7 @@ class Game2048 {
 
         //check right
         if (x < this.fieldSize - 1) {
-          if (this.field[y][x + 1]?.value === currentTile?.value) {
+          if (this.field[y][x + 1].value === currentTile.value) {
             result = true;
             break;
           }
@@ -80,7 +80,7 @@ class Game2048 {
 
         //check down
         if (y < this.fieldSize - 1) {
-          if (this.field[y + 1][x]?.value === currentTile?.value) {
+          if (this.field[y + 1][x].value === currentTile.value) {
             result = true;
             break;
           }
@@ -88,7 +88,7 @@ class Game2048 {
 
         //check left
         if (x > 0) {
-          if (this.field[y][x - 1]?.value === currentTile?.value) {
+          if (this.field[y][x - 1].value === currentTile.value) {
             result = true;
             break;
           }
@@ -105,36 +105,34 @@ class Game2048 {
     const value = Math.random() > 0.1 ? 2 : 4;
     const randomIndex = getRandomInt(0, emptyTiles.length - 1);
     const { x, y } = emptyTiles[randomIndex];
-    this.field[y][x] = { value, x, y, outline: { ...defaultOutline } };
-  }
-
-  drawTile(tile = 0, x, y, outline = 0) {
-    this.ctx.strokeStyle = tileColors[tile] || defaultTileColor;
-    this.ctx.fillStyle = tileColors[tile] || defaultTileColor;
-
-    roundRect(
-      this.ctx,
-      x + tilePadding - outline,
-      y + tilePadding - outline,
-      this.tileSize - tilePadding * 2 + outline * 2,
-      this.tileSize - tilePadding * 2 + outline * 2,
-      true
-    );
-
-    if (tile) {
-      const textX = x + this.tileSize / 2;
-      const textY = y + this.tileSize / 2 + 10;
-      this.ctx.font = `${this.tileSize / 6}pt Arial`;
-      this.ctx.textAlign = "center";
-      this.ctx.fillStyle = textColor;
-      this.ctx.fillText(tile, textX, textY);
-    }
+    this.field[y][x].setValue(value);
   }
 
   moveTiles = () => {
     const { fieldSize } = this;
 
     let moved = false;
+
+    const updateTiles = (currentTile, targetTile) => {
+      if (!targetTile.value) {
+        targetTile.setValue(currentTile.value);
+        currentTile.setValue(0);
+
+        moved = true;
+        this.isNewTileNeeded = true;
+        this.isFieldUpdated = true;
+      } else if (targetTile.value === currentTile.value) {
+        const value = currentTile.value * 2;
+
+        targetTile.setValue(value);
+        currentTile.setValue(0);
+
+        this.score += value;
+        moved = true;
+        this.isNewTileNeeded = true;
+        this.isFieldUpdated = true;
+      }
+    };
 
     const moveUp = () => {
       for (let x = 0; x < fieldSize; x++) {
@@ -147,37 +145,9 @@ class Game2048 {
             const currentTile = this.field[y][x];
             const targetTile = this.field[y - 1][x];
 
-            if (!currentTile) continue;
+            if (!currentTile.value) continue;
 
-            if (!targetTile) {
-              this.field[y - 1][x] = {
-                ...currentTile,
-                outline: { ...defaultOutline, isPlaying: false },
-                x,
-                y: y - 1,
-              };
-              this.field[y][x] = undefined;
-
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            } else if (targetTile.value === currentTile.value) {
-              const value = currentTile.value * 2;
-
-              this.field[y - 1][x] = {
-                ...currentTile,
-                outline: { ...defaultOutline },
-                value,
-                x,
-                y: y - 1,
-              };
-              this.field[y][x] = undefined;
-
-              this.score += value;
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            }
+            updateTiles(currentTile, targetTile);
           }
         }
       }
@@ -193,37 +163,9 @@ class Game2048 {
             const currentTile = this.field[y][x];
             const targetTile = this.field[y + 1][x];
 
-            if (!currentTile) continue;
+            if (!currentTile.value) continue;
 
-            if (!targetTile) {
-              this.field[y + 1][x] = {
-                ...currentTile,
-                outline: { ...defaultOutline, isPlaying: false },
-                x,
-                y: y + 1,
-              };
-              this.field[y][x] = undefined;
-
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            } else if (targetTile.value === currentTile.value) {
-              const value = currentTile.value * 2;
-
-              this.field[y + 1][x] = {
-                ...currentTile,
-                outline: { ...defaultOutline },
-                value,
-                x,
-                y: y + 1,
-              };
-              this.field[y][x] = undefined;
-
-              this.score += value;
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            }
+            updateTiles(currentTile, targetTile);
           }
         }
       }
@@ -239,37 +181,9 @@ class Game2048 {
             const currentTile = this.field[y][x];
             const targetTile = this.field[y][x - 1];
 
-            if (!currentTile) continue;
+            if (!currentTile.value) continue;
 
-            if (!targetTile) {
-              this.field[y][x - 1] = {
-                ...currentTile,
-                outline: { ...defaultOutline, isPlaying: false },
-                x: x - 1,
-                y,
-              };
-              this.field[y][x] = undefined;
-
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            } else if (targetTile.value === currentTile.value) {
-              const value = currentTile.value * 2;
-
-              this.field[y][x - 1] = {
-                ...currentTile,
-                outline: { ...defaultOutline },
-                value,
-                x: x - 1,
-                y,
-              };
-              this.field[y][x] = undefined;
-
-              this.score += value;
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            }
+            updateTiles(currentTile, targetTile);
           }
         }
       }
@@ -285,37 +199,9 @@ class Game2048 {
             const currentTile = this.field[y][x];
             const targetTile = this.field[y][x + 1];
 
-            if (!currentTile) continue;
+            if (!currentTile.value) continue;
 
-            if (!targetTile) {
-              this.field[y][x + 1] = {
-                ...currentTile,
-                outline: { ...defaultOutline, isPlaying: false },
-                x: x + 1,
-                y,
-              };
-              this.field[y][x] = undefined;
-
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            } else if (targetTile.value === currentTile.value) {
-              const value = currentTile.value * 2;
-
-              this.field[y][x + 1] = {
-                ...currentTile,
-                outline: { ...defaultOutline },
-                value,
-                x: x + 1,
-                y,
-              };
-              this.field[y][x] = undefined;
-
-              this.score += value;
-              moved = true;
-              this.isNewTileNeeded = true;
-              this.isFieldUpdated = true;
-            }
+            updateTiles(currentTile, targetTile);
           }
         }
       }
@@ -354,13 +240,15 @@ class Game2048 {
       }
     }
 
-    this.field.forEach((line, y) => {
-      line.forEach((tile, x) => {
-        this.field[y][x] = tile ? updateTileOutline(tile) : tile;
-        if (tile && tile.outline.isPlaying) {
+    this.field.forEach((line) => {
+      line.forEach((tile) => {
+        tile.updateOutline();
+
+        if (tile.outline.isPlaying) {
           this.isFieldUpdated = true;
         }
-        if (!this.isWon && tile && tile.value === 2048) {
+
+        if (!this.isWon && tile.value === 2048) {
           this.isWon = true;
         }
       });
@@ -373,12 +261,7 @@ class Game2048 {
 
     this.field.forEach((line, y) => {
       line.forEach((tile, x) => {
-        this.drawTile(
-          tile?.value,
-          x * this.tileSize,
-          y * this.tileSize,
-          tile?.outline.width
-        );
+        tile.draw();
       });
     });
   }
@@ -419,8 +302,12 @@ class Game2048 {
     );
 
     this.field = new Array(this.fieldSize)
-      .fill(0)
-      .map(() => new Array(this.fieldSize).fill(undefined));
+      .fill(undefined)
+      .map((_, y) =>
+        new Array(this.fieldSize)
+          .fill(undefined)
+          .map((_, x) => new Tile({ x, y, ctx: this.ctx }))
+      );
 
     this.addRandomTile(this.getEmptyTiles());
     this.addRandomTile(this.getEmptyTiles());
