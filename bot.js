@@ -2,8 +2,7 @@ import "dotenv/config";
 import { Telegraf, Markup } from "telegraf";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-
-const mainUrl = "https://shielded-woodland-35441.herokuapp.com";
+const mainUrl = process.env.BACKEND_URL;
 
 const games = {
   asa2048: {
