@@ -9,6 +9,11 @@ const games = {
     game_short_name: "asa2048",
     url: `${mainUrl}/2048/`,
   },
+  asa2048x5: {
+    game_short_name: "asa2048x5",
+    url: `${mainUrl}/2048`,
+    queries: { extended: true },
+  },
   t_rex: {
     game_short_name: "t_rex",
     url: `${mainUrl}/t-rex/`,
@@ -68,23 +73,26 @@ bot.gameQuery((ctx) => {
   const {
     callbackQuery: { game_short_name, message, inline_message_id },
   } = ctx;
-
+  const { url = "/", queries = {} } = games[game_short_name];
   const user_id = ctx.from.id;
-  const gameUrl = games[game_short_name].url || "/";
-  let url = "";
+  let query = {};
 
   if (message) {
-    const msgId = message.message_id;
-    const chatId = ctx.chat.id;
-    url = `${gameUrl}?user_id=${user_id}&chat_id=${chatId}&message_id=${msgId}`;
+    const message_id = message.message_id;
+    const chat_id = ctx.chat.id;
+    query = { user_id, chat_id, message_id };
   } else if (inline_message_id) {
-    url = `${gameUrl}?user_id=${user_id}&inline_message_id=${inline_message_id}`;
+    query = { user_id, inline_message_id };
   } else {
     console.log("No detail for update from callback query.", new Date());
-    url = gameUrl;
   }
 
-  return ctx.answerGameQuery(url);
+  const queryStr = Object.keys({ ...query, ...queries })
+    .map((key) => `${key}=${query[key]}`)
+    .join("&");
+  const gameUrl = queryStr ? `${url}?${queryStr}` : url;
+
+  return ctx.answerGameQuery(gameUrl);
 });
 
 bot.launch();

@@ -39,6 +39,16 @@ class Game2048 {
     this.fieldSize = fieldSize;
   }
 
+  initBoard() {
+    this.field = new Array(this.fieldSize)
+      .fill(undefined)
+      .map((_, y) =>
+        new Array(this.fieldSize)
+          .fill(undefined)
+          .map((_, x) => new Tile({ x, y, ctx: this.ctx, size: this.tileSize }))
+      );
+  }
+
   setDirection(action) {
     this.direction = this.direction || action;
   }
@@ -301,13 +311,7 @@ class Game2048 {
       this.canvas.height / this.fieldSize
     );
 
-    this.field = new Array(this.fieldSize)
-      .fill(undefined)
-      .map((_, y) =>
-        new Array(this.fieldSize)
-          .fill(undefined)
-          .map((_, x) => new Tile({ x, y, ctx: this.ctx, size: this.tileSize }))
-      );
+    this.initBoard();
 
     this.addRandomTile(this.getEmptyTiles());
     this.addRandomTile(this.getEmptyTiles());

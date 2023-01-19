@@ -81,11 +81,15 @@ const onGameWin = (score) => {
   modal.classList.remove("closed");
 };
 
-const game2048 = new Game2048(canvas, {
-  onScoreChange,
-  onGameOver,
-  onGameWin,
-});
+const game2048 = new Game2048(
+  canvas,
+  {
+    onScoreChange,
+    onGameOver,
+    onGameWin,
+  },
+  { fieldSize: params.extended && 5 }
+);
 
 game2048.start();
 
