@@ -138,6 +138,8 @@ rightBtn.addEventListener("touchend", () =>
 rightBtn.addEventListener("click", () => game2048.setDirection(actions.RIGHT));
 
 const handleGesture = () => {
+  if (isKeyboardVisible) return;
+
   const xDiff = Math.abs(touchstartX - touchendX);
   const yDiff = Math.abs(touchstartY - touchendY);
 
