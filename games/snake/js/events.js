@@ -87,7 +87,7 @@ snake.start();
 setCanvasSize();
 
 document.addEventListener("keyup", (e) => {
-  snake.setDirection(actions[e.key] || "");
+  snake.setDirection(actions[e.code] || "");
 });
 
 modalRestart.addEventListener("click", () => {

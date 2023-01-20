@@ -94,7 +94,7 @@ const game2048 = new Game2048(
 game2048.start();
 
 document.addEventListener("keyup", (e) => {
-  game2048.setDirection(actions[e.key] || "");
+  game2048.setDirection(actions[e.code] || "");
 });
 
 modalRestart.addEventListener("click", () => {

@@ -14,7 +14,11 @@ const actions = {
   ArrowRight: RIGHT,
   ArrowDown: DOWN,
   ArrowLeft: LEFT,
-  " ": ACTION,
+  Space: ACTION,
+  KeyW: UP,
+  KeyD: RIGHT,
+  KeyS: DOWN,
+  KeyA: LEFT,
 };
 
 // for food animation

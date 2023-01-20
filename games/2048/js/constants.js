@@ -12,11 +12,14 @@ const actions = {
   ArrowRight: RIGHT,
   ArrowDown: DOWN,
   ArrowLeft: LEFT,
+  KeyW: UP,
+  KeyD: RIGHT,
+  KeyS: DOWN,
+  KeyA: LEFT,
 };
 
-
-const defaultTileColor = 'rgb(238,204,97)';
-const textColor = 'rgb(119,110,101)';
+const defaultTileColor = "rgb(238,204,97)";
+const textColor = "rgb(119,110,101)";
 
 const tileColors = {
   0: "rgb(205,192,179)",

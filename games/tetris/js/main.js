@@ -82,7 +82,7 @@ setCanvasSize();
 tetris.start();
 
 document.addEventListener("keydown", (e) => {
-  tetris.setAction(actions[e.key] || "");
+  tetris.setAction(actions[e.code] || "");
 });
 
 modalRestart.addEventListener("click", () => {
