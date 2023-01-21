@@ -19,10 +19,10 @@ const modalSubmit = document.querySelector(".modal-action.submit");
 const url = new URL(location.href);
 const params = Object.fromEntries(url.searchParams);
 
-let touchstartX = 0;
-let touchendX = 0;
-let touchstartY = 0;
-let touchendY = 0;
+let touchStartX = 0;
+let touchEndX = 0;
+let touchStartY = 0;
+let touchEndY = 0;
 
 let isKeyboardVisible = false;
 
@@ -140,38 +140,48 @@ rightBtn.addEventListener("click", () => game2048.setDirection(actions.RIGHT));
 const handleGesture = () => {
   if (isKeyboardVisible) return;
 
-  const xDiff = Math.abs(touchstartX - touchendX);
-  const yDiff = Math.abs(touchstartY - touchendY);
+  const xDiff = Math.abs(touchStartX - touchEndX);
+  const yDiff = Math.abs(touchStartY - touchEndY);
 
   if (xDiff > yDiff) {
-    if (touchendX < touchstartX) game2048.setDirection(actions.LEFT);
-    if (touchendX > touchstartX) game2048.setDirection(actions.RIGHT);
+    if (touchEndX < touchStartX) game2048.setDirection(actions.LEFT);
+    if (touchEndX > touchStartX) game2048.setDirection(actions.RIGHT);
   } else {
-    if (touchendY < touchstartY) game2048.setDirection(actions.UP);
-    if (touchendY > touchstartY) game2048.setDirection(actions.DOWN);
+    if (touchEndY < touchStartY) game2048.setDirection(actions.UP);
+    if (touchEndY > touchStartY) game2048.setDirection(actions.DOWN);
   }
 };
 
-keyboard.addEventListener("touchstart", (e) => {
-  touchstartX = e.changedTouches[0].screenX;
-  touchstartY = e.changedTouches[0].screenY;
-});
+const startGesture = (e) => {
+  if (e.changedTouches) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  } else {
+    touchStartX = e.screenX;
+    touchStartY = e.screenY;
+  }
+};
 
-keyboard.addEventListener("touchend", (e) => {
-  touchendX = e.changedTouches[0].screenX;
-  touchendY = e.changedTouches[0].screenY;
-
-  handleGesture();
-});
-
-canvas.addEventListener("touchstart", (e) => {
-  touchstartX = e.changedTouches[0].screenX;
-  touchstartY = e.changedTouches[0].screenY;
-});
-
-canvas.addEventListener("touchend", (e) => {
-  touchendX = e.changedTouches[0].screenX;
-  touchendY = e.changedTouches[0].screenY;
+const endGesture = (e) => {
+  if (e.changedTouches) {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+  } else {
+    touchEndX = e.screenX;
+    touchEndY = e.screenY;
+  }
 
   handleGesture();
-});
+};
+
+keyboard.addEventListener("touchstart", startGesture);
+keyboard.addEventListener("touchend", endGesture);
+
+keyboard.addEventListener("mousedown", startGesture);
+keyboard.addEventListener("mouseup", endGesture);
+
+canvas.addEventListener("touchstart", startGesture);
+canvas.addEventListener("touchend", endGesture);
+
+canvas.addEventListener("mousedown", startGesture);
+canvas.addEventListener("mouseup", endGesture);
