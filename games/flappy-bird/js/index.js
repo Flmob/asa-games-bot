@@ -27,7 +27,7 @@ document.addEventListener("keypress", (e) => {
   keys[e.code] && flappyBird.onAction();
 });
 
-canvas.addEventListener("click", flappyBird.onAction);
-canvas.addEventListener("touchend", flappyBird.onAction);
+document.addEventListener("click", flappyBird.onAction);
+document.addEventListener("touchend", flappyBird.onAction);
 
 flappyBird.start();
