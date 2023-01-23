@@ -28,6 +28,8 @@ body {
 }
 
 .visible-zone {
+  width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,16 +124,15 @@ canvas {
   border: 2px solid darkgreen;
 }
 
-@media screen and (orientation: portrait) {
-  .visible-zone {
-    width: 100%;
-  }
-}
-
 @media screen and (orientation: landscape) {
-  .visible-zone {
+  .wrapper {
+    justify-content: center;
+  }
+
+  .visible-zone,
+  .canvas-wrapper {
     height: 100%;
-    width: 80%;
+    width: auto;
   }
 
   .keyboard,

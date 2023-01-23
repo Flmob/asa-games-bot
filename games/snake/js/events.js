@@ -75,16 +75,21 @@ const onGameOver = (score) => {
 const snake = new Snake(canvas, { onScoreChange, onGameOver });
 
 const setCanvasSize = () => {
-  setTimeout(() => {
-    canvas.width = canvasWrapper.clientWidth - 2;
-    canvas.height = canvasWrapper.clientWidth * 0.5 - 2;
+  // fix for android horizontal page bug
+  canvas.width = canvas.height = 0;
 
-    snake.setScale();
+  setTimeout(() => {
+    const { clientHeight, clientWidth } = canvasWrapper;
+
+    canvas.width = clientWidth - 2;
+    canvas.height = clientHeight - 2;
+
+    snake.setScale(true);
   }, 50);
 };
 
-snake.start();
 setCanvasSize();
+snake.start();
 
 document.addEventListener("keyup", (e) => {
   snake.setDirection(actions[e.code] || "");

@@ -3,21 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0"
+    />
     <title>2048</title>
     <link rel="stylesheet" href="./css/main.css" />
     <link rel="stylesheet" href="./css/modal.css" />
   </head>
   <body>
     <div class="wrapper">
-      <canvas id="canvas" height="400" width="400"></canvas>
+      <div class="visible-zone">
+        <div class="canvas-wrapper">
+          <canvas id="canvas" height="400" width="400"></canvas>
+        </div>
 
-      <div class="info-board">
-        <div class="score-wrapper">Score: <span class="score">0</span></div>
+        <div class="info-board">
+          <div class="score-wrapper">Score: <span class="score">0</span></div>
 
-        <button class="restart">Restart</button>
+          <button class="restart">Restart</button>
 
-        <button class="keyboard-toggle">Keyboard</button>
+          <button class="keyboard-toggle">Keyboard</button>
+        </div>
       </div>
 
       <div class="keyboard hidden">

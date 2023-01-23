@@ -1,5 +1,6 @@
 const canvas = document.querySelector("#canvas");
 
+const canvasWrapper = document.querySelector(".canvas-wrapper");
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
@@ -91,6 +92,21 @@ const game2048 = new Game2048(
   { fieldSize: params.extended && 5 }
 );
 
+const setCanvasSize = () => {
+  // fix for android horizontal page bug
+  canvas.width = canvas.height = 0;
+
+  setTimeout(() => {
+    const { clientHeight, clientWidth } = canvasWrapper;
+
+    canvas.width = clientWidth - 2;
+    canvas.height = clientHeight - 2;
+
+    game2048.setScale(true);
+  }, 50);
+};
+
+setCanvasSize();
 game2048.start();
 
 document.addEventListener("keyup", (e) => {
@@ -185,3 +201,5 @@ canvas.addEventListener("touchend", endGesture);
 
 canvas.addEventListener("mousedown", startGesture);
 canvas.addEventListener("mouseup", endGesture);
+
+window.addEventListener("resize", setCanvasSize, true);

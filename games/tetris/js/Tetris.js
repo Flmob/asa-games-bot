@@ -34,7 +34,7 @@ class Tetris {
     this.onGameOver = onGameOver;
   }
 
-  setScale = () => {
+  setScale = (isWithRedraw = false) => {
     this.squareSize = this.canvas.height / rowsCount;
     const boardWidth = this.squareSize * columnsCount;
     this.boardMargin = (this.canvas.width - boardWidth) / 2;
@@ -69,14 +69,16 @@ class Tetris {
           : this.squareSize * 3.5,
     });
 
-    this.clearCanvas();
-    this.drawBoard();
-    this.currentPiece.draw();
-    this.drawNextPiece(true);
+    if (isWithRedraw) {
+      this.clearCanvas();
+      this.drawBoard();
+      this.currentPiece.draw();
+      this.drawNextPiece(true);
 
-    this.writeScore(true);
-    this.writeCombo(true);
-    this.writeLevel(true);
+      this.writeScore(true);
+      this.writeCombo(true);
+      this.writeLevel(true);
+    }
   };
 
   setAction(action = "") {
@@ -136,7 +138,7 @@ class Tetris {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  drawNextPiece(withLabel) {
+  drawNextPiece(withLabel = false) {
     const nextPieceBoardY = this.squareSize * 2;
     const nextPieceBoardSize = this.squareSize * 4;
 
@@ -266,7 +268,7 @@ class Tetris {
     }
   }
 
-  getRandomPiece(isNextPiece) {
+  getRandomPiece(isNextPiece = false) {
     const newPiece = pieces[getRandomInt(0, pieces.length)];
 
     const marginX = isNextPiece
@@ -338,11 +340,13 @@ class Tetris {
     this.speed = defaultSpeed;
 
     this.initBoard();
-    this.drawBoard();
-
     this.nextPiece = this.getRandomPiece(true);
-    this.drawNextPiece();
     this.currentPiece = this.getRandomPiece();
+
+    this.setScale();
+
+    this.drawBoard();
+    this.drawNextPiece();
     this.currentPiece.draw();
 
     this.writeScore();

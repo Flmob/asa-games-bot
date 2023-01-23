@@ -35,15 +35,17 @@ class Snake {
     this.onGameOver = onGameOver;
   }
 
-  setScale = () => {
+  setScale = (isWithRedraw = false) => {
     this.scale = Math.max(
       this.canvas.width / this.fieldWidth,
       this.canvas.height / this.fieldHeight
     );
 
-    this.drawField();
-    this.drawSnake(true);
-    this.drawFood();
+    if (isWithRedraw) {
+      this.drawField();
+      this.drawSnake(true);
+      this.drawFood();
+    }
   };
 
   setDirection(action = "") {
@@ -181,8 +183,8 @@ class Snake {
     }
   }
 
-  drawSnake(forceDraw = false) {
-    if (this.snakeRemovedTail && !forceDraw) {
+  drawSnake(isForceDraw = false) {
+    if (this.snakeRemovedTail && !isForceDraw) {
       const { x, y } = this.snakeRemovedTail;
       this.clearCell(x, y);
 

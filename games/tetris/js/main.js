@@ -70,11 +70,16 @@ const onGameOver = (score) => {
 const tetris = new Tetris(canvas, { onGameOver });
 
 const setCanvasSize = () => {
-  setTimeout(() => {
-    canvas.height = canvasWrapper.clientHeight;
-    canvas.width = canvasWrapper.clientHeight * (450 / 400);
+  // fix for android horizontal page bug
+  canvas.width = canvas.height = 0;
 
-    tetris.setScale();
+  setTimeout(() => {
+    const { clientHeight, clientWidth } = canvasWrapper;
+
+    canvas.width = clientWidth - 2;
+    canvas.height = clientHeight - 2;
+
+    tetris.setScale(true);
   }, 50);
 };
 

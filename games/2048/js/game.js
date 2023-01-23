@@ -39,6 +39,21 @@ class Game2048 {
     this.fieldSize = fieldSize;
   }
 
+  setScale(isWithRedraw = false) {
+    this.tileSize = Math.min(
+      this.canvas.width / this.fieldSize,
+      this.canvas.height / this.fieldSize
+    );
+
+    this.field.forEach((line) =>
+      line.forEach((tile) => (tile.size = this.tileSize))
+    );
+
+    if (isWithRedraw) {
+      this.draw();
+    }
+  }
+
   initBoard() {
     this.field = new Array(this.fieldSize)
       .fill(undefined)
@@ -306,12 +321,9 @@ class Game2048 {
     this.isWon = false;
     this.isOnGameWinFired = false;
     this.score = 0;
-    this.tileSize = Math.min(
-      this.canvas.width / this.fieldSize,
-      this.canvas.height / this.fieldSize
-    );
 
     this.initBoard();
+    this.setScale();
 
     this.addRandomTile(this.getEmptyTiles());
     this.addRandomTile(this.getEmptyTiles());
