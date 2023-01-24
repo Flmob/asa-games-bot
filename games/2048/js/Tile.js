@@ -34,11 +34,18 @@ class Tile {
 
     if (this.value) {
       const textX = x + this.size / 2;
-      const textY = y + this.size / 2 + 10;
+      const textY = y + this.size / 2;
       this.ctx.font = `${this.size / 6}pt Arial`;
+      this.ctx.textBaseline = "middle";
       this.ctx.textAlign = "center";
       this.ctx.fillStyle = textColor;
-      this.ctx.fillText(this.value, textX, textY);
+      let { actualBoundingBoxAscent, actualBoundingBoxDescent } =
+        this.ctx.measureText(this.value);
+      this.ctx.fillText(
+        this.value,
+        textX,
+        textY + (actualBoundingBoxAscent - actualBoundingBoxDescent) / 2
+      );
     }
   }
 
