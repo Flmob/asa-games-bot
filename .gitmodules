@@ -1,0 +1,3 @@
+[submodule "games/t-rex"]
+	path = games/t-rex
+	url = https://github.com/Flmob/t-rex-runner
