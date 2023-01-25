@@ -1,6 +1,7 @@
 const canvas = document.querySelector("#canvas");
 
 const canvasWrapper = document.querySelector(".canvas-wrapper");
+const loadingIndicator = document.querySelector(".loading");
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
@@ -26,6 +27,11 @@ let touchStartY = 0;
 let touchEndY = 0;
 
 let isKeyboardVisible = false;
+
+const setLoadingState = (isLoading = false) => {
+  if (isLoading) loadingIndicator.classList.remove("hidden");
+  else loadingIndicator.classList.add("hidden");
+};
 
 modalCancel.onclick = () => {
   modal.classList.add("closed");
@@ -55,6 +61,7 @@ const onGameOver = (score) => {
     modal.classList.add("closed");
   };
 
+  setLoadingState(true);
   fetch("/setscore", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -68,6 +75,7 @@ const onGameOver = (score) => {
     })
     .finally(() => {
       modalBody.innerHTML = resultMessage;
+      setLoadingState(false);
     });
 };
 

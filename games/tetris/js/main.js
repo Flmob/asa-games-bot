@@ -1,6 +1,7 @@
 const canvas = document.getElementById("tetris");
 
 const canvasWrapper = document.querySelector(".canvas-wrapper");
+const loadingIndicator = document.querySelector(".loading");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
 const keyboard = document.querySelector(".keyboard");
@@ -27,6 +28,11 @@ let touchEndY = 0;
 
 let isKeyboardVisible = false;
 
+const setLoadingState = (isLoading = false) => {
+  if (isLoading) loadingIndicator.classList.remove("hidden");
+  else loadingIndicator.classList.add("hidden");
+};
+
 modalCancel.onclick = () => {
   modal.classList.add("closed");
 };
@@ -51,6 +57,7 @@ const onGameOver = (score) => {
     modal.classList.add("closed");
   };
 
+  setLoadingState(true);
   fetch("/setscore", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -64,6 +71,7 @@ const onGameOver = (score) => {
     })
     .finally(() => {
       modalBody.innerHTML = resultMessage;
+      setLoadingState(false);
     });
 };
 
