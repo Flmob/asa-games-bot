@@ -21,6 +21,7 @@ const modalSubmit = document.querySelector(".modal-action.submit");
 
 const url = new URL(location.href);
 const params = Object.fromEntries(url.searchParams);
+let lastSavedScore = 0;
 
 let touchStartX = 0;
 let touchEndX = 0;
@@ -32,6 +33,28 @@ let isKeyboardVisible = false;
 const setLoadingState = (isLoading = false) => {
   if (isLoading) loadingIndicator.classList.remove("hidden");
   else loadingIndicator.classList.add("hidden");
+};
+
+const saveScore = (score = 0) => {
+  setLoadingState(true);
+
+  if (!score || lastSavedScore > score) {
+    return Promise.resolve().then(() => setLoadingState(false));
+  }
+
+  return fetch("/setscore", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...params, score }),
+  })
+    .then((res) => {
+      lastSavedScore = score;
+      setLoadingState(false);
+    })
+    .catch((err) => {
+      setLoadingState(false);
+      throw err;
+    });
 };
 
 modalCancel.onclick = () => {
@@ -62,21 +85,15 @@ const onGameOver = (score) => {
     modal.classList.add("closed");
   };
 
-  setLoadingState(true);
-  fetch("/setscore", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...params, score }),
-  })
-    .then((res) => {
+  saveScore(score)
+    .then(() => {
       resultMessage = `${message}${scoreComment}${scoreSaved}`;
     })
-    .catch((err) => {
+    .catch(() => {
       resultMessage = `${message}${scoreComment}${errorMessageEnding}`;
     })
     .finally(() => {
       modalBody.innerHTML = resultMessage;
-      setLoadingState(false);
     });
 };
 
@@ -117,6 +134,7 @@ restartBtn.addEventListener("click", () => {
   modal.classList.remove("closed");
 
   modalSubmit.onclick = () => {
+    saveScore(snake.score);
     modal.classList.add("closed");
     snake.start();
   };
