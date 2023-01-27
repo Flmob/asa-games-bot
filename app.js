@@ -12,6 +12,7 @@ const apiToken = process.env.BOT_TOKEN;
 const url = `${telegramUrl}${apiToken}`;
 const __dirname = path.resolve();
 
+app.use(express.static(path.join(__dirname, "main_page")));
 app.use(express.static(path.join(__dirname, "games")));
 app.use(bodyParser.json());
 

@@ -11,7 +11,7 @@ const games = {
   },
   asa2048x5: {
     game_short_name: "asa2048x5",
-    url: `${mainUrl}/2048`,
+    url: `${mainUrl}/2048/`,
     queries: { extended: true },
   },
   t_rex: {
