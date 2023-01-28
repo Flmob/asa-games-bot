@@ -32,19 +32,24 @@ const games = {
 };
 
 Object.keys(games).forEach((gameKey) => {
-  const game = games[gameKey];
-  const imageUrl = `${imagesUrl}${game.url}.png`;
+  const { name, url, queries } = games[gameKey];
+  const imageUrl = `${imagesUrl}${url}.png`;
+  const query =
+    queries &&
+    Object.keys(queries)
+      .map((key) => `${key}=${queries[key]}`)
+      .join("&");
 
   const gameElement = document.createElement("a");
   gameElement.classList.add("game");
-  gameElement.href = game.url;
+  gameElement.href = `${url}${query ? "?" + query : ""}`;
 
   const imageElement = document.createElement("img");
   imageElement.src = imageUrl;
-  imageElement.alt = game.name;
+  imageElement.alt = name;
 
   const nameElement = document.createElement("span");
-  nameElement.innerHTML = game.name;
+  nameElement.innerHTML = name;
 
   gameElement.appendChild(imageElement);
   gameElement.appendChild(nameElement);
