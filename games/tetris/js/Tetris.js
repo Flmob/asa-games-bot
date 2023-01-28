@@ -28,9 +28,14 @@ class Tetris {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    const { onScoreChange = () => {}, onGameOver = () => {} } = events;
+    const {
+      onScoreChange = () => {},
+      onIsPausedChange = () => {},
+      onGameOver = () => {},
+    } = events;
 
     this.onScoreChange = onScoreChange;
+    this.onIsPausedChange = onIsPausedChange;
     this.onGameOver = onGameOver;
   }
 
@@ -81,6 +86,11 @@ class Tetris {
     }
   };
 
+  setIsPaused(isPaused) {
+    this.isPaused = isPaused;
+    this.onIsPausedChange(this.isPaused);
+  }
+
   setAction(action = "") {
     if (this.isPaused && action !== ACTION) return;
 
@@ -107,7 +117,7 @@ class Tetris {
           this.start();
           break;
         }
-        this.isPaused = !this.isPaused;
+        this.setIsPaused(!this.isPaused);
       }
     }
   }
@@ -331,7 +341,6 @@ class Tetris {
 
   start() {
     this.isGameOver = false;
-    this.isPaused = false;
 
     this.score = 0;
     this.combo = 0;
@@ -339,6 +348,7 @@ class Tetris {
     this.clearedRows = 0;
     this.speed = defaultSpeed;
 
+    this.setIsPaused(false);
     this.initBoard();
     this.nextPiece = this.getRandomPiece(true);
     this.currentPiece = this.getRandomPiece();

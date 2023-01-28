@@ -23,15 +23,21 @@ class Snake {
   ctx;
 
   onScoreChange;
+  onIsPausedChange;
   onGameOver;
 
   constructor(canvas, events) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    const { onScoreChange = () => {}, onGameOver = () => {} } = events;
+    const {
+      onScoreChange = () => {},
+      onIsPausedChange = () => {},
+      onGameOver = () => {},
+    } = events;
 
     this.onScoreChange = onScoreChange;
+    this.onIsPausedChange = onIsPausedChange;
     this.onGameOver = onGameOver;
   }
 
@@ -127,8 +133,9 @@ class Snake {
       .reverse();
   }
 
-  togglePause() {
-    this.isPaused = !this.isPaused;
+  setIsPaused(isPaused) {
+    this.isPaused = isPaused;
+    this.onIsPausedChange(this.isPaused);
   }
 
   updateSnakeAndFood() {
@@ -218,7 +225,7 @@ class Snake {
 
   updateInput() {
     if (this.direction === ACTION) {
-      this.togglePause();
+      this.setIsPaused(!this.isPaused);
       this.direction = "";
     }
 
@@ -276,10 +283,10 @@ class Snake {
     this.snakeDirection = RIGHT;
     this.lastSnakeDirection = this.snakeDirection;
     this.isGameOver = false;
-    this.isPaused = true;
     this.score = 0;
     this.snakeRemovedTail = null;
 
+    this.setIsPaused(true);
     this.onScoreChange(this.score);
     this.initSnake();
     this.dropFood();

@@ -1,6 +1,7 @@
 const canvas = document.getElementById("tetris");
 
 const canvasWrapper = document.querySelector(".canvas-wrapper");
+const pausedIndicator = document.querySelector(".paused");
 const loadingIndicator = document.querySelector(".loading");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
@@ -60,6 +61,11 @@ modalCancel.onclick = () => {
   modal.classList.add("closed");
 };
 
+const onIsPausedChange = (isPaused = false) => {
+  if (isPaused) pausedIndicator.classList.remove("hidden");
+  else pausedIndicator.classList.add("hidden");
+};
+
 const onGameOver = (score) => {
   if (!score && score !== 0) return;
 
@@ -92,7 +98,7 @@ const onGameOver = (score) => {
     });
 };
 
-const tetris = new Tetris(canvas, { onGameOver });
+const tetris = new Tetris(canvas, { onIsPausedChange, onGameOver });
 
 const setCanvasSize = () => {
   // fix for android horizontal page bug

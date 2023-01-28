@@ -1,6 +1,7 @@
 const canvas = document.querySelector("#canvas");
 
 const canvasWrapper = document.querySelector(".canvas-wrapper");
+const pausedIndicator = document.querySelector(".paused");
 const loadingIndicator = document.querySelector(".loading");
 const scoreSpan = document.querySelector(".score");
 const restartBtn = document.querySelector(".restart");
@@ -61,6 +62,11 @@ modalCancel.onclick = () => {
   modal.classList.add("closed");
 };
 
+const onIsPausedChange = (isPaused = false) => {
+  if (isPaused) pausedIndicator.classList.remove("hidden");
+  else pausedIndicator.classList.add("hidden");
+};
+
 const onScoreChange = (score) => {
   scoreSpan.innerHTML = score;
 };
@@ -97,7 +103,11 @@ const onGameOver = (score) => {
     });
 };
 
-const snake = new Snake(canvas, { onScoreChange, onGameOver });
+const snake = new Snake(canvas, {
+  onScoreChange,
+  onIsPausedChange,
+  onGameOver,
+});
 
 const setCanvasSize = () => {
   // fix for android horizontal page bug
