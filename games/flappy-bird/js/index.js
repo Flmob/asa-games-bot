@@ -53,6 +53,7 @@ document.addEventListener("keypress", (e) => {
 });
 
 document.addEventListener("click", flappyBird.onAction);
-document.addEventListener("touchend", flappyBird.onAction);
+document.addEventListener("touchstart", flappyBird.onAction);
+document.addEventListener("touchend", (e) => e.preventDefault());
 
 flappyBird.start();

@@ -192,6 +192,8 @@ const startGesture = (e) => {
 
 const endGesture = (e) => {
   if (e.changedTouches) {
+    e.preventDefault();
+    
     touchEndX = e.changedTouches[0].screenX;
     touchEndY = e.changedTouches[0].screenY;
   } else {
