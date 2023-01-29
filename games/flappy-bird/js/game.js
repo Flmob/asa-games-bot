@@ -271,7 +271,7 @@ class FlappyBird {
       this.birdX,
       this.birdY,
       this.birdAngle,
-      birdWidth,
+      birdSpriteWidth,
       birdHeight
     );
   }
@@ -333,8 +333,9 @@ class FlappyBird {
   }
 
   calcGameState() {
+    const birdActualX = this.birdX + birdBodyToSpriteGap;
     const birdBottomY = this.birdY + birdHeight;
-    const birdRightX = this.birdX + birdWidth;
+    const birdRightX = birdActualX + birdWidth;
 
     if (birdBottomY >= this.canvas.height - floorHeight) {
       this.sounds.die.play();
@@ -346,8 +347,8 @@ class FlappyBird {
       if (passed) return;
 
       const hasHorizontalCollision = () =>
-        (this.birdX > x + pipeHeadGap &&
-          this.birdX < x + pipeHeadGap + pipeWidth) ||
+        (birdActualX > x + pipeHeadGap &&
+          birdActualX < x + pipeHeadGap + pipeWidth) ||
         (birdRightX > x + pipeHeadGap &&
           birdRightX < x + pipeHeadGap + pipeWidth);
 
@@ -355,7 +356,7 @@ class FlappyBird {
         this.birdY < y || birdBottomY > y + pipesGapH;
 
       const hasHorizontalHeadCollision = () =>
-        (this.birdX > x && this.birdX < x + pipeHeadWidth) ||
+        (birdActualX > x && birdActualX < x + pipeHeadWidth) ||
         (birdRightX > x && birdRightX < x + pipeHeadWidth);
 
       const hasVerticalHeadCollision = () =>
