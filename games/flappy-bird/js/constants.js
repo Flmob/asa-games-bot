@@ -56,7 +56,7 @@ const birdDownMaxAngle = 90;
 const gravityForce = 2;
 const actionVelocity = 19;
 
-const fps = 60;
+const fps = 120;
 const fpsInterval = 1000 / fps;
 
 const gameStates = {

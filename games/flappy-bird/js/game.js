@@ -1,6 +1,7 @@
 class FlappyBird {
   canvas;
   ctx;
+  canvasRect;
 
   onGameReady = () => {};
   onScoreChange = () => {};
@@ -46,7 +47,7 @@ class FlappyBird {
 
   constructor(canvas, events) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
+    this.setupCanvas();
 
     const {
       onGameReady = () => {},
@@ -59,6 +60,25 @@ class FlappyBird {
     this.onGameOver = onGameOver;
 
     this.initData();
+  }
+
+  setupCanvas(canvas) {
+    // Get the device pixel ratio, falling back to 1.
+    const dpr = window.devicePixelRatio || 1;
+    // Get and save the size of the canvas in CSS pixels.
+    this.canvasRect = this.canvas.getBoundingClientRect();
+    // Give the canvas pixel dimensions of their CSS
+    // size * the device pixel ratio.
+    this.canvas.width = Math.floor(this.canvasRect.width * dpr);
+    this.canvas.height = Math.floor(this.canvasRect.height * dpr);
+    const ctx = this.canvas.getContext("2d");
+    // Scale all drawing operations by the dpr, so you
+    // don't have to worry about the difference.
+    ctx.scale(dpr, dpr);
+    // scale everything down using CSS
+    this.canvas.style.width = this.canvasRect.width + "px";
+    this.canvas.style.height = this.canvasRect.height + "px";
+    this.ctx = ctx;
   }
 
   initData() {
@@ -104,27 +124,27 @@ class FlappyBird {
       this.spritesObj.numberBig9,
     ];
 
-    this.logoX = this.canvas.width / 2 - logoWidth / 2;
-    this.tutorialX = this.canvas.width / 2 - tutorialWidth / 2;
-    this.tutorialY = (this.canvas.height / 4) * 3 - tutorialHeight / 2;
-    this.getReadyTextX = this.canvas.width / 2 - getReadyTextWidth / 2;
+    this.logoX = this.canvasRect.width / 2 - logoWidth / 2;
+    this.tutorialX = this.canvasRect.width / 2 - tutorialWidth / 2;
+    this.tutorialY = (this.canvasRect.height / 4) * 3 - tutorialHeight / 2;
+    this.getReadyTextX = this.canvasRect.width / 2 - getReadyTextWidth / 2;
     this.getReadyTextY = getReadyTextDefaultY;
     this.getReadyTextDelay = getReadyDefaultDelay;
-    this.gameOverTextX = this.canvas.width / 2 - gameOverTextWidth / 2;
+    this.gameOverTextX = this.canvasRect.width / 2 - gameOverTextWidth / 2;
   }
 
   initGame() {
     this.gameScore = 0;
-    this.birdX = this.canvas.width / 2 - birdWidth * 2;
-    this.birdY = this.canvas.height / 2 - birdHeight;
+    this.birdX = this.canvasRect.width / 2 - birdWidth * 2;
+    this.birdY = this.canvasRect.height / 2 - birdHeight;
     this.birdAngle = 0;
     this.birdVelocity = 0;
 
     this.pipes = this.pipes.map((_, i) => ({
-      x: i * pipesRenderGap + this.canvas.width,
+      x: i * pipesRenderGap + this.canvasRect.width,
       y: getRandomInt(
         birdHeight * 1.5,
-        this.canvas.height - (floorHeight + pipesGapH + birdHeight * 1.5)
+        this.canvasRect.height - (floorHeight + pipesGapH + birdHeight * 1.5)
       ),
       passed: false,
     }));
@@ -186,14 +206,14 @@ class FlappyBird {
     this.spritesObj.day_back.draw(
       this.backgroundOffset,
       0,
-      this.canvas.width,
-      this.canvas.height
+      this.canvasRect.width,
+      this.canvasRect.height
     );
     this.spritesObj.day_back.draw(
-      this.backgroundOffset - this.canvas.width,
+      this.backgroundOffset - this.canvasRect.width,
       0,
-      this.canvas.width,
-      this.canvas.height
+      this.canvasRect.width,
+      this.canvasRect.height
     );
 
     this.ctx.imageSmoothingEnabled = false;
@@ -203,7 +223,7 @@ class FlappyBird {
     this.backgroundOffset -= backgroundSpeed;
 
     if (this.backgroundOffset < 0) {
-      this.backgroundOffset = this.canvas.width;
+      this.backgroundOffset = this.canvasRect.width;
     }
   }
 
@@ -235,7 +255,7 @@ class FlappyBird {
         x: this.pipes[2].x + pipeHeadWidth + pipesGapW,
         y: getRandomInt(
           birdHeight * 1.5,
-          this.canvas.height - (floorHeight + pipesGapH + birdHeight * 1.5)
+          this.canvasRect.height - (floorHeight + pipesGapH + birdHeight * 1.5)
         ),
         passed: false,
       });
@@ -246,14 +266,14 @@ class FlappyBird {
   drawFloor() {
     this.spritesObj.floor.draw(
       this.floorOffset,
-      this.canvas.height - floorHeight,
-      this.canvas.width,
+      this.canvasRect.height - floorHeight,
+      this.canvasRect.width,
       100
     );
     this.spritesObj.floor.draw(
-      this.floorOffset - this.canvas.width + 1, // +1 to remove 1px gap
-      this.canvas.height - floorHeight,
-      this.canvas.width,
+      this.floorOffset - this.canvasRect.width + 1, // +1 to remove 1px gap
+      this.canvasRect.height - floorHeight,
+      this.canvasRect.width,
       100
     );
   }
@@ -262,7 +282,7 @@ class FlappyBird {
     this.floorOffset -= floorSpeed;
 
     if (this.floorOffset < 0) {
-      this.floorOffset = this.canvas.width;
+      this.floorOffset = this.canvasRect.width;
     }
   }
 
@@ -318,7 +338,7 @@ class FlappyBird {
     const scoreWidth =
       scoreArr.length * bigNumberWidth +
       (scoreArr.length - 1) * scoreWhitespace;
-    const leftPadding = (this.canvas.width - scoreWidth) / 2;
+    const leftPadding = (this.canvasRect.width - scoreWidth) / 2;
 
     scoreArr.forEach((number, i) => {
       const x = leftPadding + i * bigNumberWidth + i * scoreWhitespace;
@@ -337,7 +357,7 @@ class FlappyBird {
     const birdBottomY = this.birdY + birdHeight;
     const birdRightX = birdActualX + birdWidth;
 
-    if (birdBottomY >= this.canvas.height - floorHeight) {
+    if (birdBottomY >= this.canvasRect.height - floorHeight) {
       this.sounds.die.play();
       this.gameState = gameStates.gameOver;
       return;
