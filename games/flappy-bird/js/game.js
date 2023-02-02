@@ -356,7 +356,10 @@ class FlappyBird {
   calcGameState() {
     const birdBottomY = this.birdY + birdRadius;
 
-    if (birdBottomY >= this.canvasRect.height - floorHeight) {
+    if (
+      birdBottomY < -birdRadius ||
+      birdBottomY >= this.canvasRect.height - floorHeight
+    ) {
       this.sounds.die.play();
       this.gameState = gameStates.gameOver;
       return;
