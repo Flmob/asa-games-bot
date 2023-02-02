@@ -135,16 +135,16 @@ class FlappyBird {
 
   initGame() {
     this.gameScore = 0;
-    this.birdX = this.canvasRect.width / 2 - birdWidth * 2;
-    this.birdY = this.canvasRect.height / 2 - birdHeight;
+    this.birdX = this.canvasRect.width / 2 - birdRadius * 3;
+    this.birdY = this.canvasRect.height / 2 - birdRadius;
     this.birdAngle = 0;
     this.birdVelocity = 0;
 
     this.pipes = this.pipes.map((_, i) => ({
       x: i * pipesRenderGap + this.canvasRect.width,
       y: getRandomInt(
-        birdHeight * 1.5,
-        this.canvasRect.height - (floorHeight + pipesGapH + birdHeight * 1.5)
+        birdDiameter * 1.5,
+        this.canvasRect.height - (floorHeight + pipesGapH + birdDiameter * 1.5)
       ),
       passed: false,
     }));
@@ -254,8 +254,9 @@ class FlappyBird {
       this.pipes.push({
         x: this.pipes[2].x + pipeHeadWidth + pipesGapW,
         y: getRandomInt(
-          birdHeight * 1.5,
-          this.canvasRect.height - (floorHeight + pipesGapH + birdHeight * 1.5)
+          birdDiameter * 1.5,
+          this.canvasRect.height -
+            (floorHeight + pipesGapH + birdDiameter * 1.5)
         ),
         passed: false,
       });
@@ -288,11 +289,11 @@ class FlappyBird {
 
   drawBird() {
     this.birdSprites[Math.floor(this.birdSpriteIndex)].drawAndRotate(
-      this.birdX,
-      this.birdY,
+      this.birdX - birdRadius,
+      this.birdY - birdRadius,
       this.birdAngle,
       birdSpriteWidth,
-      birdHeight
+      birdDiameter
     );
   }
 
@@ -353,9 +354,7 @@ class FlappyBird {
   }
 
   calcGameState() {
-    const birdActualX = this.birdX + birdBodyToSpriteGap;
-    const birdBottomY = this.birdY + birdHeight;
-    const birdRightX = birdActualX + birdWidth;
+    const birdBottomY = this.birdY + birdRadius;
 
     if (birdBottomY >= this.canvasRect.height - floorHeight) {
       this.sounds.die.play();
@@ -366,30 +365,33 @@ class FlappyBird {
     this.pipes.forEach(({ x, y, passed }, i) => {
       if (passed) return;
 
-      const hasHorizontalCollision = () =>
-        (birdActualX > x + pipeHeadGap &&
-          birdActualX < x + pipeHeadGap + pipeWidth) ||
-        (birdRightX > x + pipeHeadGap &&
-          birdRightX < x + pipeHeadGap + pipeWidth);
-
-      const hasVerticalCollision = () =>
-        this.birdY < y || birdBottomY > y + pipesGapH;
-
-      const hasHorizontalHeadCollision = () =>
-        (birdActualX > x && birdActualX < x + pipeHeadWidth) ||
-        (birdRightX > x && birdRightX < x + pipeHeadWidth);
-
-      const hasVerticalHeadCollision = () =>
-        (this.birdY < y && this.birdY > y - pipeHeadHeight) ||
-        (this.birdY > y + pipesGapH &&
-          this.birdY < y + pipesGapH + pipeHeadHeight) ||
-        (birdBottomY < y && birdBottomY > y - pipeHeadHeight) ||
-        (birdBottomY > y + pipesGapH &&
-          birdBottomY < y + pipesGapH + pipeHeadHeight);
-
       if (
-        (hasVerticalHeadCollision() && hasHorizontalHeadCollision()) ||
-        (hasHorizontalCollision() && hasVerticalCollision())
+        isRectCircleCollision(
+          { x: this.birdX, y: this.birdY, r: birdRadius },
+          { x: x, y: y - pipeHeadHeight, w: pipeHeadWidth, h: pipeHeadHeight }
+        ) ||
+        isRectCircleCollision(
+          { x: this.birdX, y: this.birdY, r: birdRadius },
+          { x: x, y: y + pipesGapH, w: pipeHeadWidth, h: pipeHeadHeight }
+        ) ||
+        isRectCircleCollision(
+          { x: this.birdX, y: this.birdY, r: birdRadius },
+          {
+            x: x + pipeHeadGap,
+            y: y - this.canvasRect.height,
+            w: pipeWidth,
+            h: this.canvasRect.height,
+          }
+        ) ||
+        isRectCircleCollision(
+          { x: this.birdX, y: this.birdY, r: birdRadius },
+          {
+            x: x + pipeHeadGap,
+            y: y + pipesGapH,
+            w: pipeWidth,
+            h: this.canvasRect.height,
+          }
+        )
       ) {
         this.sounds.hit.play();
         this.gameState = gameStates.gameOver;

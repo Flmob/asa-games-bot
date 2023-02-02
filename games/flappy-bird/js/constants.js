@@ -29,19 +29,20 @@ const gameOverTextY = logoY;
 const gameOverTextHeight = 65;
 const gameOverTextWidth = gameOverTextHeight * 4.46;
 const floorHeight = 100;
+
 const birdSpriteWidth = 48;
-const birdSize = 35;
-const birdWidth = birdSize;
-const birdHeight = birdSize;
-const birdBodyToSpriteGap = Math.abs(birdSpriteWidth - birdHeight) / 2;
-const pipeHeadWidth = birdHeight * 2;
+const birdDiameter = 36;
+const birdRadius = birdDiameter / 2;
+
+const pipeHeadWidth = birdDiameter * 2;
 const pipeHeadHeight = 40;
 const pipeHeadGap = 2; // gap of pipe 'head' on each side
 const pipeWidth = pipeHeadWidth - pipeHeadGap * 2;
-const pipeHeight = pipeHeadWidth * 6;
-const pipesGapH = birdHeight * 3.745;
+const pipeHeight = pipeHeadWidth * 6; // pipe sprite height
+const pipesGapH = birdDiameter * 3.745;
 const pipesGapW = pipeHeadWidth * 2.5;
 const pipesRenderGap = pipeHeadWidth + pipesGapW;
+
 const bigNumberWidth = 30;
 const bigNumberHeight = bigNumberWidth * 1.5;
 const scoreY = 25;
