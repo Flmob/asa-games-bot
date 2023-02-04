@@ -62,7 +62,7 @@ class FlappyBird {
     this.initData();
   }
 
-  setupCanvas(canvas) {
+  setupCanvas() {
     // Get the device pixel ratio, falling back to 1.
     const dpr = window.devicePixelRatio || 1;
     // Get and save the size of the canvas in CSS pixels.
