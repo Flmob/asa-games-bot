@@ -1,18 +1,19 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html,
 body {
   position: fixed;
-
+  overflow: hidden;
+  
   height: 100%;
   width: 100%;
 }
 
 body {
-  overflow: hidden;
   background-color: lightgrey;
 }
 

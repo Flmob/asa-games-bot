@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  position: fixed;
+  overflow: hidden;
+
+  height: 100%;
+  width: 100%;
+}
+
+.loading {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 2px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.loading.hidden {
+  display: none;
+}
+
+.canvas_wrapper {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
