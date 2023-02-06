@@ -13,6 +13,7 @@ class Game2048 {
 
   canvas;
   ctx;
+  canvasRect;
 
   fieldSize;
 
@@ -39,10 +40,32 @@ class Game2048 {
     this.fieldSize = fieldSize;
   }
 
+  setupCanvas() {
+    this.ctx.resetTransform();
+    // Get the device pixel ratio, falling back to 1.
+    const dpr = window.devicePixelRatio || 1;
+    // Get and save the size of the canvas in CSS pixels.
+    this.canvasRect = this.canvas.getBoundingClientRect();
+    // Give the canvas pixel dimensions of their CSS
+    // size * the device pixel ratio.
+    this.canvas.width = Math.floor(this.canvasRect.width * dpr);
+    this.canvas.height = Math.floor(this.canvasRect.height * dpr);
+    const ctx = this.canvas.getContext("2d");
+    // Scale all drawing operations by the dpr, so you
+    // don't have to worry about the difference.
+    ctx.scale(dpr, dpr);
+    // scale everything down using CSS
+    this.canvas.style.width = this.canvasRect.width + "px";
+    this.canvas.style.height = this.canvasRect.height + "px";
+    this.ctx = ctx;
+  }
+
   setScale(isWithRedraw = false) {
+    this.setupCanvas();
+
     this.tileSize = Math.min(
-      this.canvas.width / this.fieldSize,
-      this.canvas.height / this.fieldSize
+      this.canvasRect.width / this.fieldSize,
+      this.canvasRect.height / this.fieldSize
     );
 
     this.field.forEach((line) =>
@@ -282,7 +305,7 @@ class Game2048 {
 
   draw() {
     this.ctx.fillStyle = "rgb(187,173,159)";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height);
 
     this.field.forEach((line, y) => {
       line.forEach((tile, x) => {

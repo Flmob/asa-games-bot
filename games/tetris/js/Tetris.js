@@ -20,6 +20,7 @@ class Tetris {
 
   canvas;
   ctx;
+  canvasRect;
 
   onScoreChange;
   onGameOver;
@@ -39,10 +40,32 @@ class Tetris {
     this.onGameOver = onGameOver;
   }
 
+  setupCanvas() {
+    this.ctx.resetTransform();
+    // Get the device pixel ratio, falling back to 1.
+    const dpr = window.devicePixelRatio || 1;
+    // Get and save the size of the canvas in CSS pixels.
+    this.canvasRect = this.canvas.getBoundingClientRect();
+    // Give the canvas pixel dimensions of their CSS
+    // size * the device pixel ratio.
+    this.canvas.width = Math.floor(this.canvasRect.width * dpr);
+    this.canvas.height = Math.floor(this.canvasRect.height * dpr);
+    const ctx = this.canvas.getContext("2d");
+    // Scale all drawing operations by the dpr, so you
+    // don't have to worry about the difference.
+    ctx.scale(dpr, dpr);
+    // scale everything down using CSS
+    this.canvas.style.width = this.canvasRect.width + "px";
+    this.canvas.style.height = this.canvasRect.height + "px";
+    this.ctx = ctx;
+  }
+
   setScale = (isWithRedraw = false) => {
-    this.squareSize = this.canvas.height / rowsCount;
+    this.setupCanvas();
+
+    this.squareSize = this.canvasRect.height / rowsCount;
     const boardWidth = this.squareSize * columnsCount;
-    this.boardMargin = (this.canvas.width - boardWidth) / 2;
+    this.boardMargin = (this.canvasRect.width - boardWidth) / 2;
 
     const bigPieceBoardWidth = this.squareSize * 4; // 4 - max tetromino length
     const smallPieceBoardWidth = this.squareSize * 3; // 3 - min tetromino length
@@ -145,7 +168,7 @@ class Tetris {
 
   clearCanvas() {
     this.ctx.fillStyle = vacantColor;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height);
   }
 
   drawNextPiece(withLabel = false) {

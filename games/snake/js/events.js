@@ -112,12 +112,16 @@ const snake = new Snake(canvas, {
 const setCanvasSize = () => {
   // fix for android horizontal page bug
   canvas.width = canvas.height = 0;
+  canvas.style.width = canvas.style.height = 0;
 
   setTimeout(() => {
     const { clientHeight, clientWidth } = canvasWrapper;
 
     canvas.width = clientWidth - 2;
     canvas.height = clientHeight - 2;
+
+    canvas.style.width = `${clientWidth - 2}px`;
+    canvas.style.height = `${clientHeight - 2}px`;
 
     snake.setScale(true);
   }, 50);

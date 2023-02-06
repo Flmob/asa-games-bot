@@ -21,6 +21,7 @@ class Snake {
 
   canvas;
   ctx;
+  canvasRect;
 
   onScoreChange;
   onIsPausedChange;
@@ -41,10 +42,32 @@ class Snake {
     this.onGameOver = onGameOver;
   }
 
+  setupCanvas() {
+    this.ctx.resetTransform();
+    // Get the device pixel ratio, falling back to 1.
+    const dpr = window.devicePixelRatio || 1;
+    // Get and save the size of the canvas in CSS pixels.
+    this.canvasRect = this.canvas.getBoundingClientRect();
+    // Give the canvas pixel dimensions of their CSS
+    // size * the device pixel ratio.
+    this.canvas.width = Math.floor(this.canvasRect.width * dpr);
+    this.canvas.height = Math.floor(this.canvasRect.height * dpr);
+    const ctx = this.canvas.getContext("2d");
+    // Scale all drawing operations by the dpr, so you
+    // don't have to worry about the difference.
+    ctx.scale(dpr, dpr);
+    // scale everything down using CSS
+    this.canvas.style.width = this.canvasRect.width + "px";
+    this.canvas.style.height = this.canvasRect.height + "px";
+    this.ctx = ctx;
+  }
+
   setScale = (isWithRedraw = false) => {
+    this.setupCanvas();
+
     this.scale = Math.max(
-      this.canvas.width / this.fieldWidth,
-      this.canvas.height / this.fieldHeight
+      this.canvasRect.width / this.fieldWidth,
+      this.canvasRect.height / this.fieldHeight
     );
 
     if (isWithRedraw) {
@@ -64,18 +87,18 @@ class Snake {
 
   drawField() {
     this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height);
 
     this.ctx.strokeStyle = "rgb(0, 255, 17)";
 
-    for (let x = 0; x < this.fieldWidth; x++) {
-      this.ctx.moveTo(x * this.scale - 0.5, 0);
-      this.ctx.lineTo(x * this.scale - 0.5, this.canvas.width);
+    for (let x = 0; x <= this.fieldWidth; x++) {
+      this.ctx.moveTo(x * this.scale, 0);
+      this.ctx.lineTo(x * this.scale, this.canvasRect.width);
     }
 
-    for (let y = 0; y < this.fieldHeight; y++) {
-      this.ctx.moveTo(0, y * this.scale - 0.5);
-      this.ctx.lineTo(this.canvas.width, y * this.scale - 0.5);
+    for (let y = 0; y <= this.fieldHeight; y++) {
+      this.ctx.moveTo(0, y * this.scale);
+      this.ctx.lineTo(this.canvasRect.width, y * this.scale);
     }
 
     this.ctx.stroke();
@@ -86,12 +109,7 @@ class Snake {
     this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
 
     this.ctx.strokeStyle = "rgb(0, 255, 17)";
-    this.ctx.strokeRect(
-      x * this.scale - 0.5,
-      y * this.scale - 0.5,
-      this.scale,
-      this.scale
-    );
+    this.ctx.strokeRect(x * this.scale, y * this.scale, this.scale, this.scale);
   }
 
   dropFood() {
@@ -118,8 +136,8 @@ class Snake {
     const size = this.scale - maxOutline * 2 + outlineWidth * 2;
 
     this.ctx.fillRect(
-      x * this.scale + maxOutline - outlineWidth - 0.5,
-      y * this.scale + maxOutline - outlineWidth - 0.5,
+      x * this.scale + maxOutline - outlineWidth,
+      y * this.scale + maxOutline - outlineWidth,
       size,
       size
     );
