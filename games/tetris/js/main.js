@@ -29,10 +29,15 @@ let touchStartY = 0;
 let touchEndY = 0;
 
 let isKeyboardVisible = false;
+let isPortraitOrientation = false;
 
 const setLoadingState = (isLoading = false) => {
   if (isLoading) loadingIndicator.classList.remove("hidden");
   else loadingIndicator.classList.add("hidden");
+};
+
+const setPortraitOrientation = () => {
+  isPortraitOrientation = window.innerWidth > window.innerHeight;
 };
 
 const saveScore = (score = 0) => {
@@ -118,6 +123,7 @@ const setCanvasSize = () => {
   }, 50);
 };
 
+setPortraitOrientation();
 setCanvasSize();
 tetris.start();
 
@@ -168,7 +174,7 @@ centerBtn.addEventListener("touchend", () => tetris.setAction(actions.ACTION));
 centerBtn.addEventListener("click", () => tetris.setAction(actions.ACTION));
 
 const handleGesture = () => {
-  if (isKeyboardVisible) return;
+  if (isKeyboardVisible && !isPortraitOrientation) return;
 
   const xDiff = Math.abs(touchStartX - touchEndX);
   const yDiff = Math.abs(touchStartY - touchEndY);
@@ -221,3 +227,4 @@ canvas.addEventListener("mousedown", startGesture);
 canvas.addEventListener("mouseup", endGesture);
 
 window.addEventListener("resize", setCanvasSize, true);
+window.addEventListener("resize", setPortraitOrientation, false);
