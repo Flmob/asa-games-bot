@@ -16,10 +16,6 @@ app.use(express.static(path.join(__dirname, "main_page")));
 app.use(express.static(path.join(__dirname, "games")));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.post("/setscore", (req, res) => {
   axios
     .post(`${url}/setGameScore`, req.body)
