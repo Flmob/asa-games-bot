@@ -12,6 +12,14 @@ const apiToken = process.env.BOT_TOKEN;
 const url = `${telegramUrl}${apiToken}`;
 const __dirname = path.resolve();
 
+const setScoreErrorTypes = {
+  BOT_SCORE_NOT_MODIFIED: "BOT_SCORE_NOT_MODIFIED",
+  MESSAGE_ID_INVALID: "MESSAGE_ID_INVALID",
+  PEER_ID_INVALID: "PEER_ID_INVALID",
+  SCORE_INVALID: "SCORE_INVALID",
+  USER_BOT_REQUIRED: "USER_BOT_REQUIRED",
+};
+
 app.use(express.static(path.join(__dirname, "main_page")));
 app.use(express.static(path.join(__dirname, "games")));
 app.use(bodyParser.json());
@@ -23,7 +31,18 @@ app.post("/setscore", (req, res) => {
       res.sendStatus(200);
     })
     .catch((err) => {
-      res.sendStatus(500);
+      const {
+        response: {
+          data: { error_code, description },
+        },
+      } = err;
+      const errType = description.split(": ")[1];
+
+      if (errType === setScoreErrorTypes.BOT_SCORE_NOT_MODIFIED) {
+        res.sendStatus(200);
+      } else {
+        res.sendStatus(error_code);
+      }
     });
 });
 
