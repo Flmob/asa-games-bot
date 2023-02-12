@@ -91,6 +91,7 @@ canvas {
   pointer-events: none;
 }
 
+.pause,
 .restart,
 .keyboard-toggle {
   padding: 4px;
@@ -139,7 +140,7 @@ canvas {
 }
 
 .key {
-  margin: 2px;
+  margin: 4px;
   height: 60px;
   width: 60px;
 

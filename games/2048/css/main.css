@@ -8,7 +8,7 @@ html,
 body {
   position: fixed;
   overflow: hidden;
-  
+
   height: 100%;
   width: 100%;
 }
@@ -121,7 +121,7 @@ body {
 }
 
 .key {
-  margin: 2px;
+  margin: 4px;
   height: 60px;
   width: 60px;
 

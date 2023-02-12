@@ -3,6 +3,7 @@ const canvas = document.getElementById("tetris");
 const canvasWrapper = document.querySelector(".canvas-wrapper");
 const pausedIndicator = document.querySelector(".paused");
 const loadingIndicator = document.querySelector(".loading");
+const pauseBtn = document.querySelector(".pause");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
 const keyboard = document.querySelector(".keyboard");
@@ -11,7 +12,6 @@ const upBtn = document.querySelector(".up");
 const downBtn = document.querySelector(".down");
 const leftBtn = document.querySelector(".left");
 const rightBtn = document.querySelector(".right");
-const centerBtn = document.querySelector(".center");
 
 const modal = document.querySelector(".modal-backdrop");
 const modalBody = document.querySelector(".modal-body");
@@ -67,8 +67,13 @@ modalCancel.onclick = () => {
 };
 
 const onIsPausedChange = (isPaused = false) => {
-  if (isPaused) pausedIndicator.classList.remove("hidden");
-  else pausedIndicator.classList.add("hidden");
+  if (isPaused) {
+    pausedIndicator.classList.remove("hidden");
+    pauseBtn.innerHTML = "Play";
+  } else {
+    pausedIndicator.classList.add("hidden");
+    pauseBtn.innerHTML = "Pause";
+  }
 };
 
 const onGameOver = (score) => {
@@ -136,6 +141,8 @@ modalRestart.addEventListener("click", () => {
   tetris.start();
 });
 
+pauseBtn.addEventListener("click", () => tetris.setAction(actions.ACTION));
+
 restartBtn.addEventListener("click", () => {
   const message = "Do you really want to restart?";
   modalBody.innerHTML = message;
@@ -169,9 +176,6 @@ leftBtn.addEventListener("click", () => tetris.setAction(actions.LEFT));
 
 rightBtn.addEventListener("touchend", () => tetris.setAction(actions.RIGHT));
 rightBtn.addEventListener("click", () => tetris.setAction(actions.RIGHT));
-
-centerBtn.addEventListener("touchend", () => tetris.setAction(actions.ACTION));
-centerBtn.addEventListener("click", () => tetris.setAction(actions.ACTION));
 
 const handleGesture = () => {
   if (isKeyboardVisible && !isPortraitOrientation) return;

@@ -4,6 +4,7 @@ const canvasWrapper = document.querySelector(".canvas-wrapper");
 const pausedIndicator = document.querySelector(".paused");
 const loadingIndicator = document.querySelector(".loading");
 const scoreSpan = document.querySelector(".score");
+const pauseBtn = document.querySelector(".pause");
 const restartBtn = document.querySelector(".restart");
 const keyboardToggleBtn = document.querySelector(".keyboard-toggle");
 const keyboard = document.querySelector(".keyboard");
@@ -12,7 +13,6 @@ const upBtn = document.querySelector(".up");
 const downBtn = document.querySelector(".down");
 const leftBtn = document.querySelector(".left");
 const rightBtn = document.querySelector(".right");
-const centerBtn = document.querySelector(".center");
 
 const modal = document.querySelector(".modal-backdrop");
 const modalBody = document.querySelector(".modal-body");
@@ -68,8 +68,13 @@ modalCancel.onclick = () => {
 };
 
 const onIsPausedChange = (isPaused = false) => {
-  if (isPaused) pausedIndicator.classList.remove("hidden");
-  else pausedIndicator.classList.add("hidden");
+  if (isPaused) {
+    pausedIndicator.classList.remove("hidden");
+    pauseBtn.innerHTML = "Play";
+  } else {
+    pausedIndicator.classList.add("hidden");
+    pauseBtn.innerHTML = "Pause";
+  }
 };
 
 const onScoreChange = (score) => {
@@ -145,6 +150,8 @@ modalRestart.addEventListener("click", () => {
   snake.start();
 });
 
+pauseBtn.addEventListener("click", () => snake.setDirection(actions.ACTION));
+
 restartBtn.addEventListener("click", () => {
   const message = "Do you really want to restart?";
   modalBody.innerHTML = message;
@@ -178,11 +185,6 @@ leftBtn.addEventListener("click", () => snake.setDirection(actions.LEFT));
 
 rightBtn.addEventListener("touchend", () => snake.setDirection(actions.RIGHT));
 rightBtn.addEventListener("click", () => snake.setDirection(actions.RIGHT));
-
-centerBtn.addEventListener("touchend", () =>
-  snake.setDirection(actions.ACTION)
-);
-centerBtn.addEventListener("click", () => snake.setDirection(actions.ACTION));
 
 const handleGesture = () => {
   if (isKeyboardVisible && !isPortraitOrientation) return;
