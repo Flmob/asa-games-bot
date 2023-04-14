@@ -30,6 +30,10 @@ const games = {
     game_short_name: "tetris",
     url: `${mainUrl}/tetris/`,
   },
+  t2048: {
+    game_short_name: "t2048",
+    url: `${mainUrl}/t2048/`,
+  },
 };
 
 const type = "game";

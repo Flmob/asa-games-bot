@@ -29,6 +29,10 @@ const games = {
     name: "Tetris",
     url: "/tetris",
   },
+  t2048: {
+    name: "T2048",
+    url: "/t2048",
+  }
 };
 
 Object.keys(games).forEach((gameKey) => {

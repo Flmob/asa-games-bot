@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>T2048</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/modal.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="canvas-wrapper">
+        <canvas class="canvas background"></canvas>
+        <canvas class="canvas main"></canvas>
+      </div>
+
+      <div class="info-board">
+        <div>
+          <button class="pause">Play</button>
+          <button class="restart">Restart</button>
+        </div>
+
+        <div class="score-wrapper">Score: <span class="score">0</span></div>
+      </div>
+
+      <div class="modal-backdrop closed">
+        <div class="modal-wrapper">
+          <div class="modal-body">Future text will be there!</div>
+          <div class="modal-actions">
+            <button class="modal-action restart">Restart</button>
+            <button class="modal-action cancel">Cancel</button>
+            <button class="modal-action submit">Ok</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="info paused hidden">Paused</div>
+      <div class="info loading hidden">Loading...</div>
+    </div>
+
+    <script src="js/constants.js"></script>
+    <script src="js/helpers.js"></script>
+    <script src="js/Tile.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

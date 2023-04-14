@@ -1,0 +1,47 @@
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-backdrop.closed {
+  display: none;
+}
+
+.modal-wrapper {
+  background-color: white;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  padding: 4px;
+  max-width: 50%;
+}
+
+.modal-body {
+  width: 100%;
+  white-space: pre-wrap;
+}
+
+.modal-actions {
+  margin-top: 4px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.modal-action {
+  padding: 3px;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.modal-action.hidden {
+  display: none;
+}
