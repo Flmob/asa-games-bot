@@ -302,7 +302,7 @@ class Tetris {
   }
 
   getRandomPiece(isNextPiece = false) {
-    const newPiece = pieces[getRandomInt(0, pieces.length)];
+    const newPiece = pieces[getRandomInt(0, pieces.length - 1)];
 
     const marginX = isNextPiece
       ? newPiece[0][0].length === 4
