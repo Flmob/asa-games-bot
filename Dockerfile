@@ -1,4 +1,4 @@
-FROM node
+FROM node:20.11.0
 COPY . .
 WORKDIR .
 RUN npm install
