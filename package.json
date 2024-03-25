@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "docker:build": "docker build -t bot .",
+    "docker:run": "docker run bot -p 80:80"
   },
   "author": "Flmob",
   "license": "ISC",
