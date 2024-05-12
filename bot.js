@@ -48,30 +48,30 @@ const gamesQueryArray = Object.values(games).map(({ game_short_name }, id) => ({
   ...reply_markup,
 }));
 
-bot.command("start", (ctx) => {
+bot.command("start", async (ctx) => {
   console.log({ ...ctx.from, date: new Date() });
-  bot.telegram.sendMessage(
+  await ctx.sendMessage(
     ctx.chat.id,
     "Hello there! Welcome to Asa Games Bot.",
     {}
   );
 });
 
-bot.on("inline_query", (ctx) => {
+bot.on("inline_query", async (ctx) => {
   console.log({ ...ctx.inlineQuery, date: new Date() });
-  return ctx.answerInlineQuery(gamesQueryArray);
+  await ctx.answerInlineQuery(gamesQueryArray);
 });
 
 Object.values(games).forEach(({ game_short_name }) => {
-  bot.command(game_short_name, (ctx) => {
+  bot.command(game_short_name, async (ctx) => {
     console.log(`game ${game_short_name}`);
     console.log({ ...ctx.from, date: new Date() });
 
-    return ctx.replyWithGame(game_short_name, reply_markup);
+    await ctx.replyWithGame(game_short_name, reply_markup);
   });
 });
 
-bot.gameQuery((ctx) => {
+bot.gameQuery(async (ctx) => {
   console.log("callbackQuery", { ...ctx.callbackQuery, date: new Date() });
 
   const {
@@ -96,7 +96,12 @@ bot.gameQuery((ctx) => {
     .join("&");
   const gameUrl = queryStr ? `${url}?${queryStr}` : url;
 
-  return ctx.answerGameQuery(gameUrl);
+  await ctx.answerGameQuery(gameUrl);
+});
+
+bot.catch((error) => {
+  console.log("Something went wrong!");
+  console.error(error);
 });
 
 bot.launch();

@@ -45,7 +45,7 @@ class FlappyBird {
     { x: 0, y: 0, passed: false },
   ];
 
-  constructor(canvas, events) {
+  constructor(canvas, events = {}) {
     this.canvas = canvas;
     this.setupCanvas();
 

@@ -27,7 +27,7 @@ class Snake {
   onIsPausedChange;
   onGameOver;
 
-  constructor(canvas, events) {
+  constructor(canvas, events = {}) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
