@@ -86,9 +86,6 @@ class Snake {
   }
 
   drawField() {
-    this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height);
-
     this.ctx.strokeStyle = "rgb(0, 255, 17)";
 
     for (let x = 0; x <= this.fieldWidth; x++) {
@@ -105,8 +102,7 @@ class Snake {
   }
 
   clearCell(x, y) {
-    this.ctx.fillStyle = "black";
-    this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
+    this.ctx.clearRect(x * this.scale, y * this.scale, this.scale, this.scale);
 
     this.ctx.strokeStyle = "rgb(0, 255, 17)";
     this.ctx.strokeRect(x * this.scale, y * this.scale, this.scale, this.scale);
