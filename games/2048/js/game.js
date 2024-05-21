@@ -304,7 +304,7 @@ class Game2048 {
   }
 
   draw() {
-    this.ctx.fillStyle = "rgb(187,173,159)";
+    this.ctx.fillStyle = backgroundColor;
     this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height);
 
     this.field.forEach((line, y) => {

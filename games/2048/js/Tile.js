@@ -35,7 +35,7 @@ class Tile {
     if (this.value) {
       const textX = x + this.size / 2;
       const textY = y + this.size / 2;
-      this.ctx.font = `${this.size / 6}pt Arial`;
+      this.ctx.font = `${this.size / 6}pt Jura`;
       this.ctx.textBaseline = "middle";
       this.ctx.textAlign = "center";
       this.ctx.fillStyle = textColor;
