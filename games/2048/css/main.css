@@ -134,11 +134,17 @@ button {
   border: 2px solid #fcd9af;
 }
 
-@media screen and (orientation: landscape) {
+@media screen and (min-aspect-ratio: 10.5 / 11) {
   .visible-zone,
   .canvas-wrapper {
     height: 100%;
     width: auto;
+  }
+}
+
+@media screen and (min-aspect-ratio: 5 / 7) {
+  .wrapper {
+    justify-content: center;
   }
 
   .keyboard,
