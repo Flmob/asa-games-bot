@@ -18,6 +18,8 @@ const actions = {
   KeyA: LEFT,
 };
 
+const fontFamily = "Jura";
+
 const backgroundColor = "#FCD9AF";
 const defaultTileColor = "#80B824";
 const textColor = "#000000";
