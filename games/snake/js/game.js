@@ -86,7 +86,7 @@ class Snake {
   }
 
   drawField() {
-    this.ctx.strokeStyle = "rgb(0, 255, 17)";
+    this.ctx.strokeStyle = boardBorderColor;
 
     for (let x = 0; x <= this.fieldWidth; x++) {
       this.ctx.moveTo(x * this.scale, 0);
@@ -104,7 +104,7 @@ class Snake {
   clearCell(x, y) {
     this.ctx.clearRect(x * this.scale, y * this.scale, this.scale, this.scale);
 
-    this.ctx.strokeStyle = "rgb(0, 255, 17)";
+    this.ctx.strokeStyle = boardBorderColor;
     this.ctx.strokeRect(x * this.scale, y * this.scale, this.scale, this.scale);
   }
 
@@ -127,7 +127,7 @@ class Snake {
 
     this.clearCell(x, y);
 
-    this.ctx.fillStyle = "red";
+    this.ctx.fillStyle = foodColor;
 
     const size = this.scale - maxOutline * 2 + outlineWidth * 2;
 
@@ -209,7 +209,7 @@ class Snake {
       const { x, y } = this.snakeRemovedTail;
       this.clearCell(x, y);
 
-      this.ctx.fillStyle = "green";
+      this.ctx.fillStyle = snakeHeadColor;
       this.ctx.fillRect(
         this.snake[0].x * this.scale,
         this.snake[0].y * this.scale,
@@ -217,7 +217,7 @@ class Snake {
         this.scale
       );
 
-      this.ctx.fillStyle = "darkgreen";
+      this.ctx.fillStyle = snakeBodyColor;
       this.ctx.fillRect(
         this.snake[1].x * this.scale,
         this.snake[1].y * this.scale,
@@ -226,7 +226,7 @@ class Snake {
       );
     } else {
       this.snake.forEach(({ x, y }, index) => {
-        this.ctx.fillStyle = index ? "darkgreen" : "green";
+        this.ctx.fillStyle = index ? snakeBodyColor : snakeHeadColor;
         this.ctx.fillRect(
           x * this.scale,
           y * this.scale,

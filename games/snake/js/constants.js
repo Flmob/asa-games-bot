@@ -21,6 +21,11 @@ const actions = {
   KeyA: LEFT,
 };
 
+const foodColor = "#D9D9D9";
+const snakeBodyColor = "#618D56";
+const snakeHeadColor = "#86BA79";
+const boardBorderColor = "#193A0D";
+
 // for food animation
 const maxOutline = 4;
 const defaultOutline = {
