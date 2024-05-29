@@ -17,6 +17,11 @@ body {
   background-color: black;
 }
 
+body,
+button {
+  font-family: "M PLUS 1p", sans-serif;
+}
+
 .wrapper {
   height: 100%;
   width: 100%;
@@ -70,7 +75,7 @@ body {
 }
 
 canvas {
-  border: 1px solid rgb(0, 255, 17);
+  border: 1px solid #193a0d;
 }
 
 .info-board {
@@ -87,7 +92,7 @@ canvas {
 }
 
 .score-wrapper {
-  color: green;
+  color: #618d56;
   pointer-events: none;
 }
 
@@ -95,7 +100,7 @@ canvas {
 .restart,
 .keyboard-toggle {
   padding: 4px;
-  background-color: green;
+  background-color: #618d56;
   border-radius: 4px;
   outline: none;
   cursor: pointer;
@@ -103,7 +108,7 @@ canvas {
 }
 
 .keyboard-toggle.toggled {
-  background-color: darkgreen;
+  background-color: #86ba79;
 }
 
 .keyboard {
@@ -136,7 +141,7 @@ canvas {
 }
 
 .action {
-  background-color: green;
+  background-color: #86ba79;
 }
 
 .key {
@@ -145,18 +150,20 @@ canvas {
   width: 60px;
 
   border-radius: 3px;
-  border: 2px solid darkgreen;
+  border: 2px solid #618d56;
 }
 
-@media screen and (orientation: landscape) {
-  .wrapper {
-    justify-content: center;
-  }
-
+@media screen and (min-aspect-ratio: 21 / 11) {
   .visible-zone,
   .canvas-wrapper {
     height: 100%;
     width: auto;
+  }
+}
+
+@media screen and (min-aspect-ratio: 1.25 / 1) {
+  .wrapper {
+    justify-content: center;
   }
 
   .keyboard,
