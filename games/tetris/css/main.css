@@ -141,13 +141,16 @@ canvas {
   border: 2px solid grey;
 }
 
-@media screen and (orientation: landscape) {
+@media screen and (min-aspect-ratio: 11 / 10.5) {
   .visible-zone,
   .canvas-wrapper {
     height: 100%;
     width: auto;
   }
+}
 
+@media screen and (min-aspect-ratio: 5 / 7) {
+  .wrapper,
   .info-board {
     justify-content: center;
   }
