@@ -382,9 +382,9 @@ class Tetris {
     this.drawNextPiece();
     this.currentPiece.draw();
 
-    this.writeScore();
-    this.writeCombo();
-    this.writeLevel();
+    this.writeScore(true);
+    this.writeCombo(true);
+    this.writeLevel(true);
 
     this.animate();
   }
