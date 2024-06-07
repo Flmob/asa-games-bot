@@ -25,3 +25,29 @@ const updateTileOutline = (tile, outlineStep = 0.4) => {
 
   return tile;
 };
+
+const drawCircle = ({
+  ctx,
+  x = 0,
+  y = 0,
+  radius = 0,
+  fillStyle,
+  strokeStyle,
+  strokeWidth = 1,
+}) => {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+
+  if (fillStyle) {
+    ctx.fillStyle = fillStyle;
+    ctx.fill();
+  }
+
+  if (strokeStyle) {
+    ctx.lineWidth = strokeWidth;
+    ctx.strokeStyle = strokeStyle;
+    ctx.stroke();
+  }
+
+  ctx.closePath();
+};
