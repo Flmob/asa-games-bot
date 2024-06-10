@@ -16,8 +16,7 @@ class Snake {
 
   //for FPS control
   animationFrameRequest;
-  then;
-  now;
+  then = 0;
 
   canvas;
   ctx;
@@ -259,30 +258,28 @@ class Snake {
     this.direction = "";
   }
 
-  calc() {
-    this.food = updateTileOutline(this.food);
-    this.updateSnakeAndFood();
-  }
-
   draw() {
     this.drawSnake();
     this.drawFood();
   }
 
-  step() {
-    this.calc();
-    this.draw();
-  }
-
-  animate = () => {
-    this.now = Date.now();
-    const elapsed = this.now - this.then;
+  animate = (now = 0) => {
+    const elapsed = now - this.then;
 
     this.updateInput();
 
+    if (!this.isPaused) {
+      this.food = updateTileOutline(this.food, elapsed * outlineSpeed);
+    }
+
     if (elapsed > fpsInterval) {
-      this.then = this.now - (elapsed % fpsInterval);
-      if (!this.isPaused) this.step();
+      this.then = now - (elapsed % fpsInterval);
+      if (!this.isPaused) {
+        // TODO: updateSnakeAndFood should depend on elapsed time and snake speed
+        // TODO: use only draw function here
+        this.updateSnakeAndFood();
+        this.draw();
+      }
     }
 
     if (this.isGameOver) {
@@ -310,7 +307,7 @@ class Snake {
     this.draw();
 
     cancelAnimationFrame(this.animationFrameRequest);
-    this.then = Date.now();
+    this.then = 0;
     this.animate();
   }
 }
