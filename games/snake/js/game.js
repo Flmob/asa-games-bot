@@ -129,14 +129,15 @@ class Snake {
 
     this.ctx.fillStyle = foodColor;
 
-    const size = this.scale - maxOutline * 2 + outlineWidth * 2;
+    const diameter = this.scale - maxOutline * 2 + outlineWidth * 2;
 
-    this.ctx.fillRect(
-      x * this.scale + maxOutline - outlineWidth,
-      y * this.scale + maxOutline - outlineWidth,
-      size,
-      size
-    );
+    drawCircle({
+      ctx: this.ctx,
+      x: x * this.scale + this.scale / 2,
+      y: y * this.scale + this.scale / 2,
+      radius: diameter / 2,
+      fillStyle: foodColor,
+    });
   }
 
   initSnake() {
