@@ -27,6 +27,7 @@ const snakeHeadColor = "#86BA79";
 const boardBorderColor = "#193A0D";
 
 // for food animation
+const outlineSpeed = 0.001;
 const maxOutline = 4;
 const defaultOutline = {
   width: maxOutline,
