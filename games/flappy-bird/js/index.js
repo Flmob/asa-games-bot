@@ -1,3 +1,7 @@
+const canvasWrapper = document.querySelector(".canvas_wrapper");
+const muteButton = document.querySelector(".mute_btn");
+const volumeIcon = document.querySelector(".volume-icon");
+const volumeMutedIcon = document.querySelector(".volume-muted-icon");
 const canvas = document.querySelector("canvas");
 const loadingIndicator = document.querySelector(".loading");
 
@@ -46,10 +50,35 @@ const onGameOver = (score) => {
     });
 };
 
-const flappyBird = new FlappyBird(canvas, { onGameOver });
+volumeMutedIcon.style.display = "none";
+const onIsMutedChanged = (isMuted = false) => {
+  if (isMuted) {
+    volumeIcon.style.display = "none";
+    volumeMutedIcon.style.display = "inline";
+  } else {
+    volumeIcon.style.display = "inline";
+    volumeMutedIcon.style.display = "none";
+  }
+};
+
+const flappyBird = new FlappyBird(canvas, { onGameOver, onIsMutedChanged });
+
+muteButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  flappyBird.toggleIsMuted();
+});
+muteButton.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  flappyBird.toggleIsMuted();
+});
+muteButton.addEventListener("touchend", (e) => e.preventDefault());
 
 document.addEventListener("keypress", (e) => {
   keys[e.code] && flappyBird.onAction();
+
+  e.code === "KeyM" && flappyBird.toggleIsMuted();
 });
 
 document.addEventListener("click", flappyBird.onAction);

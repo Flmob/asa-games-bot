@@ -28,10 +28,28 @@ body {
 }
 
 .canvas_wrapper {
+  position: relative;
+
   height: 100%;
   width: 100%;
 
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mute_btn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+
+  border: 2px solid black;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: transparent;
+  padding: 5px;
 }

@@ -6,6 +6,7 @@ class FlappyBird {
   onGameReady = () => {};
   onScoreChange = () => {};
   onGameOver = () => {};
+  onIsMutedChanged = () => {};
 
   hasAction = false; // to detect screen was touched or clicked
 
@@ -13,6 +14,7 @@ class FlappyBird {
   floorOffset = 0;
   spritesObj = {};
   sounds = {};
+  isMuted = false;
 
   birdSprites = [];
   birdSpriteIndex = 0;
@@ -53,11 +55,13 @@ class FlappyBird {
       onGameReady = () => {},
       onScoreChange = () => {},
       onGameOver = () => {},
+      onIsMutedChanged = () => {},
     } = events;
 
     this.onGameReady = onGameReady;
     this.onScoreChange = onScoreChange;
     this.onGameOver = onGameOver;
+    this.onIsMutedChanged = onIsMutedChanged;
 
     this.initData();
   }
@@ -98,10 +102,17 @@ class FlappyBird {
     soundsNames.forEach((name) => {
       const shortName = name.split("_")[1];
 
-      this.sounds[shortName] = new Audio(
-        `${soundsPath}/${name}.${audioExtension}`
-      );
-      this.sounds[shortName].volume = 0.1;
+      const audio = new Audio(`${soundsPath}/${name}.${audioExtension}`);
+      audio.volume = 0.1;
+
+      const play = audio.play.bind(audio);
+      audio.play = (...args) => {
+        if (this.isMuted) return;
+
+        play(...args);
+      };
+
+      this.sounds[shortName] = audio;
     });
 
     this.birdSprites = [
@@ -500,5 +511,10 @@ class FlappyBird {
 
   onAction = () => {
     this.hasAction = true;
+  };
+
+  toggleIsMuted = () => {
+    this.isMuted = !this.isMuted;
+    this.onIsMutedChanged(this.isMuted);
   };
 }
