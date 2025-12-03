@@ -10,6 +10,7 @@ class Snake {
   fieldHeight = 18;
   fieldWidth = 36;
   scale = 0;
+  dpr = 1;
 
   isGameOver = false;
   isPaused = true;
@@ -20,15 +21,20 @@ class Snake {
 
   canvas;
   ctx;
+  backgroundCanvas;
+  backgroundCtx;
   canvasRect;
 
   onScoreChange;
   onIsPausedChange;
   onGameOver;
 
-  constructor(canvas, events = {}) {
+  constructor({ canvas, backgroundCanvas }, events = {}) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
+
+    this.backgroundCanvas = backgroundCanvas;
+    this.backgroundCtx = this.backgroundCanvas.getContext("2d");
 
     const {
       onScoreChange = () => {},
@@ -43,22 +49,31 @@ class Snake {
 
   setupCanvas() {
     this.ctx.resetTransform();
+    this.backgroundCtx.resetTransform();
     // Get the device pixel ratio, falling back to 1.
     const dpr = window.devicePixelRatio || 1;
     // Get and save the size of the canvas in CSS pixels.
     this.canvasRect = this.canvas.getBoundingClientRect();
     // Give the canvas pixel dimensions of their CSS
     // size * the device pixel ratio.
-    this.canvas.width = Math.floor(this.canvasRect.width * dpr);
-    this.canvas.height = Math.floor(this.canvasRect.height * dpr);
-    const ctx = this.canvas.getContext("2d");
+    this.canvas.width = this.backgroundCanvas.width = Math.floor(
+      this.canvasRect.width * dpr
+    );
+    this.canvas.height = this.backgroundCanvas.height = Math.floor(
+      this.canvasRect.height * dpr
+    );
+
     // Scale all drawing operations by the dpr, so you
     // don't have to worry about the difference.
-    ctx.scale(dpr, dpr);
+    this.ctx.scale(dpr, dpr);
+    this.backgroundCtx.scale(dpr, dpr);
     // scale everything down using CSS
-    this.canvas.style.width = this.canvasRect.width + "px";
-    this.canvas.style.height = this.canvasRect.height + "px";
-    this.ctx = ctx;
+    this.canvas.style.width = this.backgroundCanvas.style.width =
+      this.canvasRect.width + "px";
+    this.canvas.style.height = this.backgroundCanvas.style.height =
+      this.canvasRect.height + "px";
+
+    this.dpr = dpr;
   }
 
   setScale = (isWithRedraw = false) => {
@@ -85,26 +100,25 @@ class Snake {
   }
 
   drawField() {
-    this.ctx.strokeStyle = boardBorderColor;
+    this.backgroundCtx.strokeStyle = boardBorderColor;
+
+    this.backgroundCtx.beginPath();
 
     for (let x = 0; x <= this.fieldWidth; x++) {
-      this.ctx.moveTo(x * this.scale, 0);
-      this.ctx.lineTo(x * this.scale, this.canvasRect.width);
+      this.backgroundCtx.moveTo(x * this.scale, 0);
+      this.backgroundCtx.lineTo(x * this.scale, this.fieldHeight * this.scale);
     }
 
     for (let y = 0; y <= this.fieldHeight; y++) {
-      this.ctx.moveTo(0, y * this.scale);
-      this.ctx.lineTo(this.canvasRect.width, y * this.scale);
+      this.backgroundCtx.moveTo(0, y * this.scale);
+      this.backgroundCtx.lineTo(this.fieldWidth * this.scale, y * this.scale);
     }
 
-    this.ctx.stroke();
+    this.backgroundCtx.stroke();
   }
 
   clearCell(x, y) {
     this.ctx.clearRect(x * this.scale, y * this.scale, this.scale, this.scale);
-
-    this.ctx.strokeStyle = boardBorderColor;
-    this.ctx.strokeRect(x * this.scale, y * this.scale, this.scale, this.scale);
   }
 
   dropFood() {

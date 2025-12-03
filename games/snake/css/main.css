@@ -65,6 +65,8 @@ button {
 }
 
 .canvas-wrapper {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,8 +76,14 @@ button {
   max-height: 100%;
 }
 
-canvas {
+.canvas.background {
+  z-index: 1;
+  position: absolute;
   border: 1px solid #193a0d;
+}
+
+.canvas.main {
+  z-index: 2;
 }
 
 .info-board {

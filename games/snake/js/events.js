@@ -1,4 +1,5 @@
-const canvas = document.querySelector("#canvas");
+const canvas = document.querySelector(".main.canvas");
+const backgroundCanvas = document.querySelector(".background.canvas");
 
 const canvasWrapper = document.querySelector(".canvas-wrapper");
 const pausedIndicator = document.querySelector(".paused");
@@ -113,25 +114,31 @@ const onGameOver = (score) => {
     });
 };
 
-const snake = new Snake(canvas, {
-  onScoreChange,
-  onIsPausedChange,
-  onGameOver,
-});
+const snake = new Snake(
+  { canvas, backgroundCanvas },
+  {
+    onScoreChange,
+    onIsPausedChange,
+    onGameOver,
+  }
+);
 
 const setCanvasSize = () => {
   // fix for android horizontal page bug
   canvas.width = canvas.height = 0;
   canvas.style.width = canvas.style.height = 0;
 
+  backgroundCanvas.width = backgroundCanvas.height = 0;
+  backgroundCanvas.style.width = backgroundCanvas.style.height = 0;
+
   setTimeout(() => {
     const { clientHeight, clientWidth } = canvasWrapper;
 
-    canvas.width = clientWidth - 2;
-    canvas.height = clientHeight - 2;
+    canvas.width = backgroundCanvas.width = clientWidth;
+    canvas.height = backgroundCanvas.height = clientHeight;
 
-    canvas.style.width = `${clientWidth - 2}px`;
-    canvas.style.height = `${clientHeight - 2}px`;
+    canvas.style.width = backgroundCanvas.style.width = `${clientWidth}px`;
+    canvas.style.height = backgroundCanvas.style.height = `${clientHeight}px`;
 
     snake.setScale(true);
   }, 50);
