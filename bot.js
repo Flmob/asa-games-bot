@@ -50,9 +50,9 @@ const gamesQueryArray = Object.values(games).map(({ game_short_name }, id) => ({
 
 bot.command("start", async (ctx) => {
   console.log({ ...ctx.from, date: new Date() });
-  await ctx.sendMessage(
+  await bot.telegram.sendMessage(
     ctx.chat.id,
-    "Hello there! Welcome to Asa Games Bot.",
+    "Hello there! Welcome to Asa Games Bot!",
     {}
   );
 });
